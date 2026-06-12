@@ -32,7 +32,7 @@ public class DinoSpeciesRegistry {
         if (speciesName == null) {
             return Optional.empty();
         }
-        return Optional.ofNullable(speciesByName.get(speciesName));
+        return Optional.ofNullable(speciesByName.get(speciesName.toUpperCase(Locale.ROOT)));
     }
 
     private static Map<String, DinoSpecies> loadFromJson(Resource resource) {

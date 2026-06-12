@@ -11,6 +11,7 @@ import fr.liksi.parcmanager.service.dto.EnclosWithDinos;
 import fr.liksi.parcmanager.service.exception.DinoAlreadyExistsException;
 import fr.liksi.parcmanager.service.exception.NoSuitableEnclosException;
 import fr.liksi.parcmanager.service.exception.SpeciesNotFoundException;
+import fr.liksi.parcmanager.service.exception.UnknownResidentSpeciesException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,8 +64,7 @@ public class DinoAssignmentServiceImpl implements DinoAssignmentService {
 
     private BigDecimal calculateAvailableSurface(Enclos enclos) {
         final var usedSurface = enclos.getDinos().stream()
-            .map(dino -> dinoSpeciesService.findDinoSpeciesBySpeciesName(dino.getSpecies()))
-            .flatMap(Optional::stream)
+            .map(this::requireResidentSpecies)
             .map(DinoSpecies::getRequiredSurface)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
@@ -78,8 +78,7 @@ public class DinoAssignmentServiceImpl implements DinoAssignmentService {
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         final var consumedWater = enclos.getDinos().stream()
-            .map(dino -> dinoSpeciesService.findDinoSpeciesBySpeciesName(dino.getSpecies()))
-            .flatMap(Optional::stream)
+            .map(this::requireResidentSpecies)
             .map(DinoSpecies::getWaterQuantity)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
@@ -95,13 +94,24 @@ public class DinoAssignmentServiceImpl implements DinoAssignmentService {
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         final var consumedFood = enclos.getDinos().stream()
-            .map(dino -> dinoSpeciesService.findDinoSpeciesBySpeciesName(dino.getSpecies()))
-            .flatMap(Optional::stream)
+            .map(this::requireResidentSpecies)
             .filter(s -> s.getFoodType() == type)
             .map(DinoSpecies::getFoodQuantity)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return totalFood.subtract(consumedFood);
+    }
+
+    /**
+     * Résout l'espèce d'un dino déjà présent dans un enclos.
+     *
+     * <p>Une espèce résidente inconnue est une incohérence de données : l'ignorer
+     * silencieusement reviendrait à compter sa consommation pour zéro et à
+     * sur-remplir l'enclos (cf. BUG-1042). On échoue donc explicitement.
+     */
+    private DinoSpecies requireResidentSpecies(fr.liksi.parcmanager.model.entity.Dino dino) {
+        return dinoSpeciesService.findDinoSpeciesBySpeciesName(dino.getSpecies())
+            .orElseThrow(() -> new UnknownResidentSpeciesException(dino.getSpecies()));
     }
 
     private DinoAssignment toAssignmentResponse(Parc parc) {

@@ -60,7 +60,7 @@ public class JdbcParcRepository implements ParcRepository {
     }
 
     public List<Parc> findParcsByNomMatchingPattern(String regexPattern) {
-        return jdbcClient.sql("SELECT * FROM parc WHERE nom REGEXP :pattern")
+        return jdbcClient.sql("SELECT * FROM parc WHERE nom ~ :pattern")
             .param("pattern", regexPattern)
             .query((rs, ignoredRowNum) -> {
                 final var parc = new Parc(

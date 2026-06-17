@@ -2,6 +2,7 @@ package fr.liksi.parcmanager.repository;
 
 import fr.liksi.parcmanager.model.entity.Eau;
 import fr.liksi.parcmanager.model.entity.Nourriture;
+import fr.liksi.parcmanager.model.entity.Parc;
 import fr.liksi.parcmanager.model.enums.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,6 +64,30 @@ class JdbcParcRepositoryTest {
                     "VALUES (?, ?, ?, ?, ?)")
             .params(Arrays.asList("EAU", new BigDecimal("1000.00"), foretEnclosId, null, TypeEau.DOUCE.name()))
             .update();
+    }
+
+    @Test
+    void shouldAddParc() {
+        final var parc = new Parc(NomParc.NOIRMOUTIER,Climat.CHAUD,StatutParc.OUVERT);
+        parcRepository.addParc(parc);
+
+        final var results = jdbcClient.sql("SELECT * FROM parc WHERE nom = ?")
+            .params(NomParc.NOIRMOUTIER.name())
+            .query(rs -> {
+                if (rs.next()) {
+                    final var p = new Parc(
+                            NomParc.valueOf(rs.getString("nom")),
+                            Climat.valueOf(rs.getString("climat")),
+                            StatutParc.valueOf(rs.getString("statut")));
+                    return p;
+                }
+                return null;
+            });
+
+        assertThat(results).isNotNull();
+        assertThat(results.getNom()).isEqualTo(NomParc.NOIRMOUTIER);
+        assertThat(results.getClimat()).isEqualTo(Climat.CHAUD);
+        assertThat(results.getStatut()).isEqualTo(StatutParc.OUVERT);
     }
 
     @Test

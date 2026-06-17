@@ -42,6 +42,14 @@ public class JdbcParcRepository implements ParcRepository {
         this.jdbcClient = jdbcClient;
     }
 
+    public void addParc(Parc parc) {
+        jdbcClient.sql("INSERT INTO parc (nom, climat, statut) VALUES (:nom, :climat, :statut)")
+            .param("nom", parc.getNom().name())
+            .param("climat", parc.getClimat().name())
+            .param("statut", parc.getStatut().name())
+            .update();
+    }
+
     public List<Parc> findCandidateParcs(List<Climat> climats, StatutParc statut) {
         if (climats == null || climats.isEmpty()) {
             return List.of();

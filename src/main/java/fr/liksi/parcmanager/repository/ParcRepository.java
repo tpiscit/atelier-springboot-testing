@@ -9,6 +9,8 @@ import java.util.UUID;
 
 public interface ParcRepository {
 
+    void addParc(Parc parc);
+
     List<Parc> findCandidateParcs(List<Climat> climats, StatutParc statut);
 
     boolean existsDinoById(UUID id);

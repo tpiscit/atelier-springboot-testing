@@ -187,9 +187,27 @@ class DinoAssignmentServiceImplTest {
             .isInstanceOf(NoSuitableEnclosException.class);
     }
 
+    @Test
+    void unParcEnConstructionNAccueillePasDeDino() {
+        final var trexId = unTrexAAffecter();
+        // Given : aucun parc ouvert n'est disponible
+        ajouterNouveauxParcs(creerParcAvecEnclosPourTrex(NomParc.NOIRMOUTIER, StatutParc.CONSTRUCTION));
+
+
+        assertThatThrownBy(() -> dinoAssignmentService.assignDino(trexId))
+            .isInstanceOf(NoSuitableEnclosException.class);
+    }
+
     // -------------------------------------------------------------------------
     // Helpers
     // -------------------------------------------------------------------------
+
+    private Parc creerParcAvecEnclosPourTrex(NomParc nom, StatutParc statut) {
+        final var parc = new Parc(nom, Climat.CHAUD, statut);
+        parc.setId(1L);
+        ajouterUnEnclos(parc, Typologie.PLAINE, 1000, 500, 200);
+        return parc;
+    }
 
     private UUID unTrexAAffecter() {
         final var dinoId = UUID.randomUUID();
@@ -228,5 +246,10 @@ class DinoAssignmentServiceImplTest {
 
     private void ajouterNouveauxParcs(Parc... parcs) {
         when(parcRepository.findCandidateParcs(any())).thenReturn(List.of(parcs));
+        /*TODO replace thenReturn with
+        .thenAnswer(invocation -> {
+            final StatutParc statutDemande = invocation.getArgument(1);
+            return TODO
+         */
     }
 }

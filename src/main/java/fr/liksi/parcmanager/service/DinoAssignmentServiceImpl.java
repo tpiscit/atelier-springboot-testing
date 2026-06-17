@@ -1,6 +1,7 @@
 package fr.liksi.parcmanager.service;
 
 import fr.liksi.parcmanager.model.entity.*;
+import fr.liksi.parcmanager.model.enums.StatutParc;
 import fr.liksi.parcmanager.model.enums.TypeNourriture;
 import fr.liksi.parcmanager.repository.ParcRepository;
 import fr.liksi.parcmanager.service.dinospecies.DinoSpeciesService;
@@ -48,7 +49,7 @@ public class DinoAssignmentServiceImpl implements DinoAssignmentService {
     }
 
     private Enclos findSuitableEnclos(DinoSpecies species) {
-        return parcRepository.findCandidateParcs(species.getPreferredClimates()).stream()
+        return parcRepository.findCandidateParcs(species.getPreferredClimates(), StatutParc.OUVERT).stream()
             .flatMap(parc -> parc.getEnclos().stream())
             .filter(enclos -> isEnclosSuitable(enclos, species))
             .findFirst()

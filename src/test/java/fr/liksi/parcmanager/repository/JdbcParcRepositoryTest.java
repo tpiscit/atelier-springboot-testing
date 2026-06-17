@@ -67,7 +67,7 @@ class JdbcParcRepositoryTest {
 
     @Test
     void shouldFindCandidateParcsByClimat() {
-        final var results = parcRepository.findCandidateParcs(List.of(Climat.CHAUD));
+        final var results = parcRepository.findCandidateParcs(List.of(Climat.CHAUD), StatutParc.OUVERT);
 
         assertThat(results).hasSize(1);
         final var parc = results.getFirst();
@@ -104,7 +104,7 @@ class JdbcParcRepositoryTest {
 
     @Test
     void shouldReturnEmptyWhenNoParcMatchesClimat() {
-        final var results = parcRepository.findCandidateParcs(List.of(Climat.TEMPERE));
+        final var results = parcRepository.findCandidateParcs(List.of(Climat.TEMPERE), StatutParc.OUVERT);
 
         assertThat(results).isEmpty();
     }
@@ -128,13 +128,27 @@ class JdbcParcRepositoryTest {
         final var dinoId = UUID.randomUUID();
         parcRepository.saveDino(dinoId, "VELOCIRAPTOR", foretEnclosId);
 
-        final var results = parcRepository.findCandidateParcs(List.of(Climat.CHAUD));
+        final var results = parcRepository.findCandidateParcs(List.of(Climat.CHAUD), StatutParc.OUVERT);
 
         assertThat(results).hasSize(1);
         final var enclos = results.getFirst().getEnclos().iterator().next();
         assertThat(enclos.getDinos()).hasSize(1);
         assertThat(enclos.getDinos().iterator().next().getId()).isEqualTo(dinoId);
         assertThat(enclos.getDinos().iterator().next().getSpecies()).isEqualTo("VELOCIRAPTOR");
+    }
+
+    @Test
+    void shouldNotReturnParcsThatAreNotOpen() {
+        // FEAT-2077 : un parc non ouvert n'est jamais candidat
+        jdbcClient.sql("INSERT INTO parc (nom, climat, statut) VALUES (?, ?, ?)")
+            .params(NomParc.NOIRMOUTIER.name(), Climat.CHAUD.name(), StatutParc.CONSTRUCTION.name())
+            .update();
+
+        final var results = parcRepository.findCandidateParcs(List.of(Climat.CHAUD), StatutParc.OUVERT);
+
+        assertThat(results)
+            .extracting(p -> p.getNom())
+            .containsExactly(NomParc.HAWAII);
     }
 
     @Test

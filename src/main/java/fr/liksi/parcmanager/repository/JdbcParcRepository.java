@@ -33,6 +33,7 @@ public class JdbcParcRepository implements ParcRepository {
         LEFT JOIN ressource r ON r.enclos_id = e.id
         LEFT JOIN dino d      ON d.enclos_id = e.id
         WHERE p.climat IN (:climats)
+          AND p.statut = :statut
         """;
 
     private final JdbcClient jdbcClient;
@@ -41,7 +42,7 @@ public class JdbcParcRepository implements ParcRepository {
         this.jdbcClient = jdbcClient;
     }
 
-    public List<Parc> findCandidateParcs(List<Climat> climats) {
+    public List<Parc> findCandidateParcs(List<Climat> climats, StatutParc statut) {
         if (climats == null || climats.isEmpty()) {
             return List.of();
         }
@@ -49,6 +50,7 @@ public class JdbcParcRepository implements ParcRepository {
 
         return jdbcClient.sql(SELECT_AGGREGATE_SQL)
             .param("climats", climatNames)
+            .param("statut", statut.name())
             .query(this::extractParcs);
     }
 

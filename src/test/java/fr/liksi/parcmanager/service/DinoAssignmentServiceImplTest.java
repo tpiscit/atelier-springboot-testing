@@ -18,9 +18,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -74,7 +76,7 @@ class DinoAssignmentServiceImplTest {
         // When & Then
         assertThatThrownBy(() -> dinoAssignmentService.assignDino(dinoId))
             .isInstanceOf(SpeciesNotFoundException.class);
-        verify(parcRepository, never()).findCandidateParcs(any());
+        verify(parcRepository, never()).findCandidateParcs(any(), any());
     }
 
     @Test
@@ -87,14 +89,14 @@ class DinoAssignmentServiceImplTest {
             .isInstanceOf(DinoAlreadyExistsException.class)
             .hasMessageContaining(dinoId.toString());
         verify(dinoTypeApiClient, never()).getDinoType(any());
-        verify(parcRepository, never()).findCandidateParcs(any());
+        verify(parcRepository, never()).findCandidateParcs(any(), any());
     }
 
     @Test
     void lAffectationEchoueQuandAucunParcNeCorrespondAuClimat() {
         // Given
         final var trexId = unTrexAAffecter();
-        when(parcRepository.findCandidateParcs(any())).thenReturn(List.of());
+        when(parcRepository.findCandidateParcs(any(),any())).thenReturn(List.of());
 
         // When & Then
         assertThatThrownBy(() -> dinoAssignmentService.assignDino(trexId))
@@ -193,7 +195,6 @@ class DinoAssignmentServiceImplTest {
         // Given : aucun parc ouvert n'est disponible
         ajouterNouveauxParcs(creerParcAvecEnclosPourTrex(NomParc.NOIRMOUTIER, StatutParc.CONSTRUCTION));
 
-
         assertThatThrownBy(() -> dinoAssignmentService.assignDino(trexId))
             .isInstanceOf(NoSuitableEnclosException.class);
     }
@@ -245,11 +246,11 @@ class DinoAssignmentServiceImplTest {
     }
 
     private void ajouterNouveauxParcs(Parc... parcs) {
-        when(parcRepository.findCandidateParcs(any())).thenReturn(List.of(parcs));
-        /*TODO replace thenReturn with
-        .thenAnswer(invocation -> {
+        when(parcRepository.findCandidateParcs(any(), any())).thenAnswer(invocation -> {
             final StatutParc statutDemande = invocation.getArgument(1);
-            return TODO
-         */
+            return Arrays.stream(parcs)
+                    .filter(parc -> parc.getStatut() == statutDemande)
+                    .toList();
+        });
     }
 }

@@ -1,0 +1,63 @@
+{
+  "parcName": "HAWAII",
+  "climat": "CHAUD",
+  "enclos": [
+    {
+      "id": 1,
+      "typologie": "PLAINE",
+      "surface": 15000.00,
+      "dinos": [
+        {
+          "id": "__DINO_ID__",
+          "species": "TREX"
+        }
+      ],
+      "availableResources": {
+        "availableWater": 2950.00,
+        "availableFoodByType": {
+          "ANIMAL": 900.00
+        },
+        "availableSurface": 14800.00
+      }
+    },
+    {
+      "id": 2,
+      "typologie": "FORET",
+      "surface": 5000.00,
+      "dinos": [],
+      "availableResources": {
+        "availableWater": 1000.00,
+        "availableFoodByType": {
+          "ANIMAL": 500.00
+        },
+        "availableSurface": 5000.00
+      }
+    },
+    {
+      "id": 3,
+      "typologie": "EAU",
+      "surface": 5000.00,
+      "dinos": [],
+      "availableResources": {
+        "availableWater": 50000.00,
+        "availableFoodByType": {
+          "POISSON": 500.00
+        },
+        "availableSurface": 5000.00
+      }
+    },
+    {
+      "id": 4,
+      "typologie": "PLAINE",
+      "surface": 20000.00,
+      "dinos": [],
+      "availableResources": {
+        "availableWater": 5000.00,
+        "availableFoodByType": {
+          "VEGETAL": 2000.00
+        },
+        "availableSurface": 20000.00
+      }
+    }
+  ]
+}

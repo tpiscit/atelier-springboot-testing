@@ -52,7 +52,7 @@ public class DinoAssignmentServiceImpl implements DinoAssignmentService {
         return parcRepository.findCandidateParcs(species.getPreferredClimates(), StatutParc.OUVERT).stream()
             .flatMap(parc -> parc.getEnclos().stream())
             .filter(enclos -> isEnclosSuitable(enclos, species))
-            .findFirst()
+            .min(Comparator.comparing(Enclos::getId))
             .orElseThrow(() -> new NoSuitableEnclosException(species.getSpeciesName()));
     }
 

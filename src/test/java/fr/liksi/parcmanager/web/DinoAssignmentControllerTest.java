@@ -1,5 +1,6 @@
 package fr.liksi.parcmanager.web;
 
+import fr.liksi.parcmanager.config.SecurityConfig;
 import fr.liksi.parcmanager.model.enums.Climat;
 import fr.liksi.parcmanager.model.enums.NomParc;
 import fr.liksi.parcmanager.model.enums.TypeNourriture;
@@ -16,6 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -33,9 +36,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles("test")
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(DinoAssignmentController.class)
+@Import(SecurityConfig.class)
 class DinoAssignmentControllerTest {
 
     @Autowired

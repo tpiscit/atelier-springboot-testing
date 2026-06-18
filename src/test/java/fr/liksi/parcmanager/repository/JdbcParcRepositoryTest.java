@@ -6,7 +6,9 @@ import fr.liksi.parcmanager.model.enums.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.test.autoconfigure.JdbcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.test.context.ActiveProfiles;
@@ -24,8 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Sql(scripts = "/sql/cleanup-flyway-data.sql",
      executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @ActiveProfiles("test")
-@SpringBootTest
-@Transactional
+@JdbcTest
+@Import(JdbcParcRepository.class)
 class JdbcParcRepositoryTest {
 
     @Autowired

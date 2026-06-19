@@ -24,6 +24,7 @@ public class InMemoryParcRepository implements ParcRepository {
         }
         return parcs.stream()
             .filter(parc -> climats.contains(parc.getClimat()))
+            .filter(parc -> statut.equals(parc.getStatut()))
             .toList();
     }
 

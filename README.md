@@ -18,6 +18,27 @@ docker compose version
 git --version
 ```
 
+## Avant de commencer : preparer l'environnement (warm-up)
+
+Des le clone (branche `main`), pendant l'introduction de l'atelier, lancez :
+
+```bash
+./mvnw test
+```
+
+Cette commande met a profit le temps de l'intro pour :
+
+- telecharger toutes les dependances Maven (et les plugins) ;
+- pre-telecharger (pull) l'image Docker `postgres:16` via un test de warm-up
+  ([`DockerImageWarmupTest`](src/test/java/fr/liksi/parcmanager/DockerImageWarmupTest.java)).
+
+L'image `postgres:16` ainsi recuperee est **reutilisee par Testcontainers** aux
+etapes qui passent sur PostgreSQL : plus d'attente de telechargement a ce
+moment-la.
+
+> Le test de warm-up n'existe que sur `main`. Il disparait automatiquement des
+> que vous basculez sur une etape (`git switch atelier/...`).
+
 ## Stack technique
 
 | Composant     | Version |

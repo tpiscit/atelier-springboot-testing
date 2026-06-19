@@ -187,6 +187,24 @@ class DinoAssignmentServiceImplTest {
             .isInstanceOf(NoSuitableEnclosException.class);
     }
 
+    @Test
+    void reproduceBug1042_trexShouldBeRejectedWhenVelociraptorAlreadyOccupiesEnclos() {
+        // Given : l'enclos du ticket — 220 m², un Velociraptor (50 m²) déjà présent
+        // (espèce stockée en base avec son nom d'affichage, comme constaté en prod)
+        final var trexId = unTrexAAffecter();
+        final var parc = parcHawaiiOuvert();
+        final var enclos = ajouterUnEnclos(parc, Typologie.FORET, 220, 500, 300);
+        final var velociraptor = new Dino(UUID.randomUUID(),"Velociraptor");
+        enclos.addDino(velociraptor);
+        when(dinoSpeciesService.findDinoSpeciesBySpeciesName("Velociraptor"))
+                .thenReturn(Optional.of(velociraptorSpecies));
+        ajouterNouveauxParcs(parc);
+
+        // When & Then : l'affectation est bien refusée... le test passe, bug non reproduit !
+        assertThatThrownBy(() -> dinoAssignmentService.assignDino(trexId))
+            .isInstanceOf(NoSuitableEnclosException.class);
+    }
+
     // -------------------------------------------------------------------------
     // Helpers
     // -------------------------------------------------------------------------

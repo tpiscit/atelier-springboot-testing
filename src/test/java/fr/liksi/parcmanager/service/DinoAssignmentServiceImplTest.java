@@ -1,22 +1,24 @@
 package fr.liksi.parcmanager.service;
 
+import fr.liksi.parcmanager.external.DinoTypeApiClient;
+import fr.liksi.parcmanager.external.DinoTypeServiceImpl;
+import fr.liksi.parcmanager.external.dto.DinoTypeDto;
 import fr.liksi.parcmanager.model.entity.*;
 import fr.liksi.parcmanager.model.enums.*;
 import fr.liksi.parcmanager.repository.ParcRepository;
-import fr.liksi.parcmanager.service.dinospecies.DinoSpeciesService;
+import fr.liksi.parcmanager.service.dinospecies.DinoSpeciesRegistry;
+import fr.liksi.parcmanager.service.dinospecies.DinoSpeciesServiceImpl;
 import fr.liksi.parcmanager.service.exception.DinoAlreadyExistsException;
 import fr.liksi.parcmanager.service.exception.NoSuitableEnclosException;
 import fr.liksi.parcmanager.service.exception.SpeciesNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,40 +26,22 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ActiveProfiles("test")
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class DinoAssignmentServiceImplTest {
 
-    @Autowired
     private DinoAssignmentService dinoAssignmentService;
 
-    @MockitoBean
+    @Mock
     private ParcRepository parcRepository;
 
-    @MockitoBean
-    private DinoSpeciesService dinoSpeciesService;
+    @Mock
+    private DinoTypeApiClient dinoTypeApiClient;
 
-    private final DinoSpecies trexSpecies = new DinoSpecies(
-            "TREX",
-            TypeNourriture.ANIMAL,
-            BigDecimal.valueOf(100),
-            BigDecimal.valueOf(50),
-            List.of(Typologie.PLAINE, Typologie.FORET),
-            BigDecimal.valueOf(200),
-            List.of(Climat.CHAUD, Climat.TEMPERE)
-    );
-
-    private final DinoSpecies velociraptorSpecies = new DinoSpecies(
-            "VELOCIRAPTOR",
-            TypeNourriture.ANIMAL,
-            BigDecimal.valueOf(30),
-            BigDecimal.valueOf(20),
-            List.of(Typologie.FORET),
-            BigDecimal.valueOf(50),
-            List.of(Climat.CHAUD)
-    );
     @BeforeEach
     void setUp() {
+        dinoAssignmentService = new DinoAssignmentServiceImpl(
+                parcRepository,
+                new DinoSpeciesServiceImpl(new DinoSpeciesRegistry(),new DinoTypeServiceImpl(dinoTypeApiClient)));
     }
 
     @Test
@@ -102,7 +86,7 @@ class DinoAssignmentServiceImplTest {
         assertThatThrownBy(() -> dinoAssignmentService.assignDino(dinoId))
             .isInstanceOf(DinoAlreadyExistsException.class)
             .hasMessageContaining(dinoId.toString());
-        verify(dinoSpeciesService, never()).findDinoSpeciesByDinoId(any());
+        verify(dinoTypeApiClient, never()).getDinoType(any());
         verify(parcRepository, never()).findCandidateParcs(any());
     }
 
@@ -196,8 +180,6 @@ class DinoAssignmentServiceImplTest {
         final var enclos = ajouterUnEnclos(parc, Typologie.FORET, 220, 500, 300);
         final var velociraptor = new Dino(UUID.randomUUID(),"Velociraptor");
         enclos.addDino(velociraptor);
-        when(dinoSpeciesService.findDinoSpeciesBySpeciesName("Velociraptor"))
-                .thenReturn(Optional.of(velociraptorSpecies));
         ajouterNouveauxParcs(parc);
 
         // When & Then : l'affectation est bien refusée... le test passe, bug non reproduit !
@@ -211,14 +193,14 @@ class DinoAssignmentServiceImplTest {
 
     private UUID unTrexAAffecter() {
         final var dinoId = UUID.randomUUID();
-        when(dinoSpeciesService.findDinoSpeciesByDinoId(dinoId))
-            .thenReturn(Optional.of(trexSpecies));
+        when(dinoTypeApiClient.getDinoType(dinoId))
+            .thenReturn(new DinoTypeDto(dinoId, "TREX", "Theropoda"));
         return dinoId;
     }
 
     private UUID unDinoDEspeceInconnue() {
         final var dinoId = UUID.randomUUID();
-        when(dinoSpeciesService.findDinoSpeciesByDinoId(dinoId)).thenReturn(Optional.empty());
+        when(dinoTypeApiClient.getDinoType(dinoId)).thenReturn(null);
         return dinoId;
     }
 

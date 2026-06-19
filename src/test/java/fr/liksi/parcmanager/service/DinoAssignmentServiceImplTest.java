@@ -1,11 +1,12 @@
 package fr.liksi.parcmanager.service;
 
-import fr.liksi.parcmanager.external.DinoTypeApiClient;
 import fr.liksi.parcmanager.external.DinoTypeServiceImpl;
+import fr.liksi.parcmanager.external.Fake.InMemoryDinoTypeApiClient;
 import fr.liksi.parcmanager.external.dto.DinoTypeDto;
 import fr.liksi.parcmanager.model.entity.*;
 import fr.liksi.parcmanager.model.enums.*;
 import fr.liksi.parcmanager.repository.ParcRepository;
+import fr.liksi.parcmanager.repository.fake.InMemoryParcRepository;
 import fr.liksi.parcmanager.service.dinospecies.DinoSpeciesRegistry;
 import fr.liksi.parcmanager.service.dinospecies.DinoSpeciesServiceImpl;
 import fr.liksi.parcmanager.service.exception.DinoAlreadyExistsException;
@@ -13,31 +14,21 @@ import fr.liksi.parcmanager.service.exception.NoSuitableEnclosException;
 import fr.liksi.parcmanager.service.exception.SpeciesNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class DinoAssignmentServiceImplTest {
 
     private DinoAssignmentService dinoAssignmentService;
 
-    @Mock
-    private ParcRepository parcRepository;
+    private final ParcRepository parcRepository = new InMemoryParcRepository();
 
-    @Mock
-    private DinoTypeApiClient dinoTypeApiClient;
+    private final InMemoryDinoTypeApiClient dinoTypeApiClient = new InMemoryDinoTypeApiClient();
 
     @BeforeEach
     void setUp() {
@@ -65,7 +56,6 @@ class DinoAssignmentServiceImplTest {
                 assertThat(dino.getId()).isEqualTo(trexId);
                 assertThat(dino.getSpecies()).isEqualTo("TREX");
             });
-        verify(parcRepository).saveDino(trexId, "TREX", enclos.getId());
     }
 
     @Test
@@ -76,7 +66,6 @@ class DinoAssignmentServiceImplTest {
         // When & Then
         assertThatThrownBy(() -> dinoAssignmentService.assignDino(dinoId))
             .isInstanceOf(SpeciesNotFoundException.class);
-        verify(parcRepository, never()).findCandidateParcs(any(), any());
     }
 
     @Test
@@ -88,15 +77,12 @@ class DinoAssignmentServiceImplTest {
         assertThatThrownBy(() -> dinoAssignmentService.assignDino(dinoId))
             .isInstanceOf(DinoAlreadyExistsException.class)
             .hasMessageContaining(dinoId.toString());
-        verify(dinoTypeApiClient, never()).getDinoType(any());
-        verify(parcRepository, never()).findCandidateParcs(any(), any());
     }
 
     @Test
     void lAffectationEchoueQuandAucunParcNeCorrespondAuClimat() {
         // Given
         final var trexId = unTrexAAffecter();
-        when(parcRepository.findCandidateParcs(any(),any())).thenReturn(List.of());
 
         // When & Then
         assertThatThrownBy(() -> dinoAssignmentService.assignDino(trexId))
@@ -212,20 +198,17 @@ class DinoAssignmentServiceImplTest {
 
     private UUID unTrexAAffecter() {
         final var dinoId = UUID.randomUUID();
-        when(dinoTypeApiClient.getDinoType(dinoId))
-            .thenReturn(new DinoTypeDto(dinoId, "TREX", "Theropoda"));
+        dinoTypeApiClient.AddDinoType(new DinoTypeDto(dinoId, "TREX", "Theropoda"));
         return dinoId;
     }
 
     private UUID unDinoDEspeceInconnue() {
-        final var dinoId = UUID.randomUUID();
-        when(dinoTypeApiClient.getDinoType(dinoId)).thenReturn(null);
-        return dinoId;
+        return UUID.randomUUID();
     }
 
     private UUID unDinoDejaAffecte() {
         final var dinoId = UUID.randomUUID();
-        when(parcRepository.existsDinoById(dinoId)).thenReturn(true);
+        parcRepository.saveDino(dinoId, "species", 1L);
         return dinoId;
     }
 
@@ -246,11 +229,6 @@ class DinoAssignmentServiceImplTest {
     }
 
     private void ajouterNouveauxParcs(Parc... parcs) {
-        when(parcRepository.findCandidateParcs(any(), any())).thenAnswer(invocation -> {
-            final StatutParc statutDemande = invocation.getArgument(1);
-            return Arrays.stream(parcs)
-                    .filter(parc -> parc.getStatut() == statutDemande)
-                    .toList();
-        });
+        Arrays.stream(parcs).forEach(parcRepository::addParc);
     }
 }

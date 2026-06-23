@@ -1,0 +1,182 @@
+[
+  {
+    "speciesName": "TREX",
+    "foodType": "ANIMAL",
+    "foodQuantity": 100.00,
+    "waterQuantity": 50.00,
+    "preferredHabitats": ["PLAINE", "FORET"],
+    "requiredSurface": 200.00,
+    "preferredClimates": ["CHAUD", "TEMPERE"]
+  },
+  {
+    "speciesName": "Velociraptor",
+    "foodType": "ANIMAL",
+    "foodQuantity": 30.00,
+    "waterQuantity": 20.00,
+    "preferredHabitats": ["FORET"],
+    "requiredSurface": 50.00,
+    "preferredClimates": ["CHAUD"]
+  },
+  {
+    "speciesName": "ALLOSAURUS",
+    "foodType": "ANIMAL",
+    "foodQuantity": 70.00,
+    "waterQuantity": 40.00,
+    "preferredHabitats": ["PLAINE", "FORET"],
+    "requiredSurface": 150.00,
+    "preferredClimates": ["TEMPERE"]
+  },
+  {
+    "speciesName": "DILOPHOSAURUS",
+    "foodType": "ANIMAL",
+    "foodQuantity": 25.00,
+    "waterQuantity": 30.00,
+    "preferredHabitats": ["FORET", "EAU"],
+    "requiredSurface": 60.00,
+    "preferredClimates": ["CHAUD", "TEMPERE"]
+  },
+  {
+    "speciesName": "CARNOTAURUS",
+    "foodType": "ANIMAL",
+    "foodQuantity": 60.00,
+    "waterQuantity": 35.00,
+    "preferredHabitats": ["PLAINE"],
+    "requiredSurface": 120.00,
+    "preferredClimates": ["CHAUD"]
+  },
+  {
+    "speciesName": "COMPSOGNATHUS",
+    "foodType": "ANIMAL",
+    "foodQuantity": 5.00,
+    "waterQuantity": 5.00,
+    "preferredHabitats": ["FORET"],
+    "requiredSurface": 10.00,
+    "preferredClimates": ["CHAUD", "TEMPERE"]
+  },
+  {
+    "speciesName": "QUETZALCOATLUS",
+    "foodType": "ANIMAL",
+    "foodQuantity": 35.00,
+    "waterQuantity": 20.00,
+    "preferredHabitats": ["MONTAGNE", "PLAINE"],
+    "requiredSurface": 150.00,
+    "preferredClimates": ["CHAUD"]
+  },
+  {
+    "speciesName": "BRACHIOSAURUS",
+    "foodType": "VEGETAL",
+    "foodQuantity": 500.00,
+    "waterQuantity": 200.00,
+    "preferredHabitats": ["PLAINE"],
+    "requiredSurface": 500.00,
+    "preferredClimates": ["CHAUD", "TEMPERE"]
+  },
+  {
+    "speciesName": "TRICERATOPS",
+    "foodType": "VEGETAL",
+    "foodQuantity": 150.00,
+    "waterQuantity": 80.00,
+    "preferredHabitats": ["PLAINE", "FORET"],
+    "requiredSurface": 100.00,
+    "preferredClimates": ["TEMPERE", "FROID"]
+  },
+  {
+    "speciesName": "STEGOSAURUS",
+    "foodType": "VEGETAL",
+    "foodQuantity": 120.00,
+    "waterQuantity": 60.00,
+    "preferredHabitats": ["PLAINE", "FORET"],
+    "requiredSurface": 80.00,
+    "preferredClimates": ["TEMPERE"]
+  },
+  {
+    "speciesName": "ANKYLOSAURUS",
+    "foodType": "VEGETAL",
+    "foodQuantity": 100.00,
+    "waterQuantity": 50.00,
+    "preferredHabitats": ["PLAINE"],
+    "requiredSurface": 70.00,
+    "preferredClimates": ["TEMPERE", "FROID"]
+  },
+  {
+    "speciesName": "PARASAUROLOPHUS",
+    "foodType": "VEGETAL",
+    "foodQuantity": 80.00,
+    "waterQuantity": 70.00,
+    "preferredHabitats": ["PLAINE", "EAU"],
+    "requiredSurface": 90.00,
+    "preferredClimates": ["TEMPERE"]
+  },
+  {
+    "speciesName": "DIPLODOCUS",
+    "foodType": "VEGETAL",
+    "foodQuantity": 400.00,
+    "waterQuantity": 180.00,
+    "preferredHabitats": ["PLAINE"],
+    "requiredSurface": 450.00,
+    "preferredClimates": ["CHAUD"]
+  },
+  {
+    "speciesName": "PACHYCEPHALOSAURUS",
+    "foodType": "VEGETAL",
+    "foodQuantity": 40.00,
+    "waterQuantity": 25.00,
+    "preferredHabitats": ["MONTAGNE", "FORET"],
+    "requiredSurface": 45.00,
+    "preferredClimates": ["TEMPERE", "FROID"]
+  },
+  {
+    "speciesName": "GALLIMIMUS",
+    "foodType": "VEGETAL",
+    "foodQuantity": 20.00,
+    "waterQuantity": 15.00,
+    "preferredHabitats": ["PLAINE"],
+    "requiredSurface": 30.00,
+    "preferredClimates": ["CHAUD", "TEMPERE"]
+  },
+  {
+    "speciesName": "SPINOSAURUS",
+    "foodType": "POISSON",
+    "foodQuantity": 80.00,
+    "waterQuantity": 100.00,
+    "preferredHabitats": ["EAU", "PLAINE"],
+    "requiredSurface": 250.00,
+    "preferredClimates": ["CHAUD", "TEMPERE"]
+  },
+  {
+    "speciesName": "MOSASAURUS",
+    "foodType": "POISSON",
+    "foodQuantity": 200.00,
+    "waterQuantity": 500.00,
+    "preferredHabitats": ["EAU"],
+    "requiredSurface": 800.00,
+    "preferredClimates": ["TEMPERE"]
+  },
+  {
+    "speciesName": "PLESIOSAURUS",
+    "foodType": "POISSON",
+    "foodQuantity": 60.00,
+    "waterQuantity": 300.00,
+    "preferredHabitats": ["EAU"],
+    "requiredSurface": 400.00,
+    "preferredClimates": ["FROID", "TEMPERE"]
+  },
+  {
+    "speciesName": "PTERANODON",
+    "foodType": "POISSON",
+    "foodQuantity": 20.00,
+    "waterQuantity": 15.00,
+    "preferredHabitats": ["MONTAGNE", "EAU"],
+    "requiredSurface": 100.00,
+    "preferredClimates": ["CHAUD", "TEMPERE"]
+  },
+  {
+    "speciesName": "PTERODACTYL",
+    "foodType": "POISSON",
+    "foodQuantity": 15.00,
+    "waterQuantity": 10.00,
+    "preferredHabitats": ["MONTAGNE"],
+    "requiredSurface": 80.00,
+    "preferredClimates": ["FROID"]
+  }
+]

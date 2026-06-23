@@ -1,0 +1,19 @@
+### ============================================
+### PARC API - Gestion des parcs
+### ============================================
+
+### Récupérer le parc HAWAII
+GET {{host}}/api/parcs/HAWAII
+Accept: application/json
+
+### Récupérer le parc BELLEILE
+GET {{host}}/api/parcs/BELLEILE
+Accept: application/json
+
+### Récupérer le parc NOIRMOUTIER
+GET {{host}}/api/parcs/NOIRMOUTIER
+Accept: application/json
+
+### Récupérer un parc inexistant (devrait retourner 404)
+GET {{host}}/api/parcs/ATLANTIS
+Accept: application/json

@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atelier Spring Boot Testing</title>
+
+  <!-- Reveal.js core CSS (vendored) -->
+  <link rel="stylesheet" href="vendor/reveal/reset.css">
+  <link rel="stylesheet" href="vendor/reveal/reveal.css">
+
+  <!-- Liksi light theme (vendored) -->
+  <link rel="stylesheet" href="vendor/liksi-theme/css/liksi-light.css" id="theme">
+
+  <!-- Code highlight theme (vendored) -->
+  <link rel="stylesheet" href="vendor/reveal/plugin/highlight/monokai.css">
+
+  <!-- Custom styles (architecture diagram) -->
+  <link rel="stylesheet" href="css/custom.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE 1 — COVER (titre)
+           ════════════════════════════════════════════════════════════════════ -->
+      <section class="slide-cover">
+        <h1>
+          Rendez vos tests Spring Boot<br>
+          <strong>rapides, robustes et maintenables</strong>
+        </h1>
+        <p class="intro-text">
+          Atelier pratique &mdash; 2h<br>
+          Refactoring de tests sur une application existante<br>
+          pour des tests qui expriment le sens du code metier
+        </p>
+      </section>
+
+      <!-- ════════════════════════════════════════════════
+           SLIDE 2 — RÉCUPÉRER LA CODEBASE (dépôt + QR)
+           ═════════════════════════════════════════════════ -->
+      <section class="slide-grab">
+        <h2>Récupérer la codebase</h2>
+        <div class="grab-prereqs">
+          <span class="grab-prereq-label">Prérequis</span>
+          <span class="grab-prereq">Java&nbsp;25</span>
+          <span class="grab-prereq">Docker</span>
+          <span class="grab-prereq">Git</span>
+          <span class="grab-prereq">IDE&nbsp;Java</span>
+        </div>
+        <p class="intro-text">
+          Clonez le dépôt, puis lancez le warm-up
+        </p>
+        <div class="grab-content">
+          <div class="grab-qr">
+            <img src="assets/qr-repo.png" alt="QR code du dépôt GitHub" class="qr-img">
+          </div>
+          <div class="grab-info">
+            <div class="grab-label">Dépôt Git</div>
+            <div class="grab-url">github.com/tpiscit/atelier-springboot-testing</div>
+          </div>
+        </div>
+        <pre class="grab-pre"><code class="language-bash" data-trim>git clone https://github.com/tpiscit/atelier-springboot-testing.git
+cd atelier-springboot-testing
+./mvnw test</code></pre>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE 3 — WJB2C XP (World Jurassic B2C Experience)
+           ════════════════════════════════════════════════════════════════════ -->
+      <section>
+        <h2>World Jurassic B2C Experience</h2>
+        <p class="text-accent" style="font-size: 0.75em; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 16px;">
+          WJB2C XP
+        </p>
+        <div class="wjb2c-gif-container">
+          <img src="assets/jurassic-welcome.gif"
+               alt="Welcome to Jurassic Park"
+               class="wjb2c-gif">
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE 3 — ARCHITECTURE DE LA CODEBASE
+           ════════════════════════════════════════════════════════════════════ -->
+      <section>
+        <h2>La codebase actuelle</h2>
+        <div class="archi-diagram">
+
+          <!-- Colonne gauche : API d'entree -->
+          <div class="archi-column archi-col-left">
+            <div class="archi-column-header archi-header-api">API d'entree</div>
+            <div class="archi-card archi-card-api archi-card-primary">
+              <div class="archi-card-label">Assignation dino</div>
+              <code>POST /api/dinos/assign</code>
+            </div>
+          </div>
+
+          <!-- Fleches gauche -->
+          <div class="archi-arrows">
+            <div class="archi-arrow-right"></div>
+          </div>
+
+          <!-- Colonne centrale : Metier -->
+          <div class="archi-column archi-col-center">
+            <div class="archi-column-header archi-header-business">Metier</div>
+            <div class="archi-business-block">
+              <div class="archi-business-name">Parc Manager</div>
+              <div class="archi-business-separator"></div>
+              <div class="archi-business-algo">
+                <div class="archi-algo-title">Algorithme d'assignation</div>
+                <div class="archi-algo-steps">
+                  <span class="archi-algo-step">Climat</span>
+                  <span class="archi-algo-step">Habitat</span>
+                  <span class="archi-algo-step">Surface</span>
+                  <span class="archi-algo-step">Eau</span>
+                  <span class="archi-algo-step">Nourriture</span>
+                </div>
+                <div class="archi-algo-desc">
+                  Trouve l'enclos adapté en fonction<br>des besoins de l'espèce<br>
+                  <span class="archi-card-detail">catalogue &amp; besoins : registry JSON (classpath)</span>
+                </div>
+              </div>
+              <div class="archi-business-separator"></div>
+              <div class="archi-business-services">
+                <span class="archi-service-tag">ParcService</span>
+                <span class="archi-service-tag">EnclosService</span>
+                <span class="archi-service-tag">DinoAssignment</span>
+                <span class="archi-service-tag">DinoSpecies</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fleches droite -->
+          <div class="archi-arrows">
+            <div class="archi-arrow-right"></div>
+            <div class="archi-arrow-right"></div>
+          </div>
+
+          <!-- Colonne droite : Ports externes -->
+          <div class="archi-column archi-col-right">
+            <div class="archi-column-header archi-header-ext">Ports externes</div>
+            <div class="archi-card archi-card-pg">
+              <div class="archi-card-badge">PostgreSQL 16</div>
+              <div class="archi-card-desc">
+                Parcs, Enclos, Dinos<br>
+                Ressources (Eau, Nourriture)<br>
+                <span class="archi-card-detail">Flyway migrations &middot; JDBC</span>
+              </div>
+            </div>
+            <div class="archi-card archi-card-rest">
+              <div class="archi-card-badge">API REST externe</div>
+              <div class="archi-card-desc">
+                DinoType Service<br>
+                UUID &rarr; espece + famille<br>
+                <span class="archi-card-detail">RestClient &middot; HttpExchange</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═════════════════════════════════════════════════
+           SLIDE 6 — VOTRE AVIS
+           ═════════════════════════════════════════════════ -->
+      <section class="slide-poll">
+        <h2>Wordwall testing codebase</h2>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE 7 — IoC & INJECTION DE DÉPENDANCES (théorie)
+           Fragments : 0=scan 1=singleton 2=autoconfig 3=graphe 4=conséquences 5=@SpringBootTest
+           ════════════════════════════════════════════════════════════════════ -->
+      <section>
+        <!-- Notes synchronisées par fragment via fragmentshown JS -->
+        <aside class="notes">
+          <div data-notes-fragment="-1">
+            <strong>ÉTAT INITIAL — 100% Spring Framework</strong>
+            <ul>
+              <li>Sans Spring : <code>new Controller(new Service(new Repository()))</code> → couplage fort</li>
+              <li>Changer d'impl oblige à modifier le code appelant</li>
+              <li>Tester en isolation est impossible sans instancier toute la chaîne</li>
+            </ul>
+            <strong>IoC (Inversion of Control)</strong>
+            <ul>
+              <li>Ce n'est plus le code qui crée ses dépendances — c'est le conteneur</li>
+              <li>Le Controller déclare son besoin, Spring fournit l'instance</li>
+              <li>Contrôle transféré du code métier vers le conteneur</li>
+            </ul>
+          </div>
+          <div data-notes-fragment="0">
+            <strong>Component Scan — Spring Framework</strong>
+            <ul>
+              <li><code>@ComponentScan</code> scanne les packages à la recherche de stéréotypes</li>
+              <li>Stéréotypes : <code>@Component</code>, <code>@Service</code>, <code>@Repository</code>, <code>@Controller</code></li>
+              <li>Spring enregistre les définitions de beans — sans encore les instancier</li>
+              <li>⚠ Pas encore Spring Boot ici : <code>@ComponentScan</code> est 100% Spring Framework</li>
+            </ul>
+          </div>
+          <div data-notes-fragment="1">
+            <strong>ApplicationContext — Spring Framework</strong>
+            <ul>
+              <li>Le conteneur IoC qui gère le cycle de vie de tous les beans</li>
+              <li>Bien plus qu'une map : scopes, événements, <code>@PostConstruct</code> / <code>@PreDestroy</code></li>
+              <li>Scope singleton par défaut → une seule instance partagée entre tous</li>
+            </ul>
+          </div>
+          <div data-notes-fragment="2">
+            <strong>Auto-Configuration — Spring Boot</strong>
+            <ul>
+              <li>C'est ici qu'on passe de Spring Framework à Spring Boot</li>
+              <li><code>@SpringBootApplication</code> détecte les dépendances du classpath</li>
+              <li><code>spring-data-jpa</code> présent → DataSource + EntityManagerFactory configurés auto</li>
+              <li><code>spring-security</code> présent → filtre de sécurité activé auto</li>
+              <li><code>@ConditionalOnMissingBean</code> : le dev surcharge uniquement ce qu'il veut</li>
+              <li>Pattern "starter" : une dépendance = une auto-configuration</li>
+            </ul>
+          </div>
+          <div data-notes-fragment="3">
+            <strong>Résolution du graphe de dépendances</strong>
+            <ul>
+              <li>Spring n'instancie <em>pas</em> les beans dans l'ordre du code</li>
+              <li>Il analyse le graphe, instancie les feuilles d'abord (sans dépendances)</li>
+              <li>Remonte le graphe jusqu'aux beans qui dépendent de tout le reste</li>
+              <li>Cycle A→B→A détecté au démarrage → exception claire</li>
+              <li>Injection par constructeur rend les dépendances explicites et vérifiables</li>
+            </ul>
+          </div>
+          <div data-notes-fragment="4">
+            <strong>@SpringBootTest — transition vers le slide suivant</strong>
+            <ul>
+              <li>Rejoue TOUT ce qu'on vient de voir : scan + graphe + auto-config + infra</li>
+              <li>Puissant pour les tests d'intégration E2E</li>
+              <li>❓ Question à poser : "A-t-on besoin de tout ça pour tester un seul endpoint ?"</li>
+              <li>→ Transition vers le Slice Testing</li>
+            </ul>
+          </div>
+        </aside>
+        <h2>IoC &amp; Injection de d&eacute;pendances</h2>
+        <div class="ioc-scene">
+
+          <!-- ── Colonne gauche : le graphe de beans + Auto-Configuration ── -->
+          <div class="ioc-col ioc-col-left">
+
+            <div class="ioc-graph-area">
+
+              <div class="ioc-scan-frame">
+                <!-- Frag 0 : label Component Scan -->
+                <div class="ioc-scan-label fragment" data-fragment-index="0">
+                  &#128269;&nbsp; Component Scan
+                </div>
+                <!-- Frag 1 : label ApplicationContext (remplace) -->
+                <div class="ioc-ctx-label fragment" data-fragment-index="1">
+                  ApplicationContext
+                </div>
+
+                <div class="ioc-nodes">
+
+                  <!-- Nœud Controller -->
+                  <div class="ioc-node-row">
+                    <div class="ioc-node">
+                      <span class="ioc-node-annotation">@RestController</span>
+                      <span class="ioc-node-name">Controller</span>
+                      <span class="ioc-singleton-badge fragment" data-fragment-index="1">singleton</span>
+                    </div>
+                  </div>
+
+                  <!-- Frag 3 : flèche Controller → Service -->
+                  <div class="ioc-dep-connector fragment" data-fragment-index="3">
+                    <div class="ioc-dep-line"></div>
+                    <span class="ioc-dep-label">inject&eacute; par constructeur</span>
+                  </div>
+
+                  <!-- Nœud Service -->
+                  <div class="ioc-node-row">
+                    <div class="ioc-node" style="flex:1">
+                      <span class="ioc-node-annotation">@Service</span>
+                      <span class="ioc-node-name">Service</span>
+                      <span class="ioc-singleton-badge fragment" data-fragment-index="1">singleton</span>
+                    </div>
+                  </div>
+
+                  <!-- Frag 3 : flèche Service → Repository -->
+                  <div class="ioc-dep-connector fragment" data-fragment-index="3">
+                    <div class="ioc-dep-line"></div>
+                    <span class="ioc-dep-label">inject&eacute; par constructeur</span>
+                  </div>
+
+                  <!-- Nœud Repository -->
+                  <div class="ioc-node-row">
+                    <div class="ioc-node">
+                      <span class="ioc-node-annotation">@Repository</span>
+                      <span class="ioc-node-name">Repository</span>
+                      <span class="ioc-singleton-badge fragment" data-fragment-index="1">singleton</span>
+                    </div>
+                  </div>
+
+                </div><!-- /ioc-nodes -->
+              </div><!-- /ioc-scan-frame -->
+
+            </div><!-- /ioc-graph-area -->
+
+            <!-- Frag 2 : encart Auto-Configuration (bas gauche) -->
+            <div class="ioc-autoconfig-block fragment" data-fragment-index="2">
+              <div class="ioc-autoconfig-title">
+                Auto-Configuration &mdash; <code>@SpringBootApplication</code>
+              </div>
+              <div class="ioc-autoconfig-pills">
+                <span class="ioc-autoconfig-pill">@Configuration</span>
+                <span class="ioc-autoconfig-pill">@Bean</span>
+                <span class="ioc-autoconfig-pill">@ConditionalOnClass</span>
+                <span class="ioc-autoconfig-pill">@ConditionalOnMissingBean</span>
+                <span class="ioc-autoconfig-pill">spring.factories</span>
+              </div>
+              <div class="ioc-autoconfig-desc">
+                Spring Boot d&eacute;tecte les d&eacute;pendances du classpath et configure automatiquement
+                les beans infra (DataSource, Jackson, Security&hellip;) sans configuration explicite.
+              </div>
+            </div>
+
+          </div><!-- /ioc-col-left -->
+
+          <!-- ── Colonne droite : Résolution du graphe + @SpringBootTest ── -->
+          <div class="ioc-col ioc-col-right">
+
+            <!-- Frag 3 : note résolution de graphe (haut droite) -->
+            <div class="ioc-graph-note fragment" data-fragment-index="3">
+              <strong>R&eacute;solution du graphe de d&eacute;pendances</strong> &mdash;
+              Spring analyse les d&eacute;pendances, instancie les feuilles en premier (Repository),
+              remonte le graphe, d&eacute;tecte les cycles, puis injecte via le constructeur.
+            </div>
+
+            <!-- Frag 4 : bloc @SpringBootTest (bas droite) -->
+            <div class="ioc-sbt-block fragment" data-fragment-index="4">
+              <div class="ioc-sbt-annotation">@SpringBootTest</div>
+              <div class="ioc-sbt-desc">D&eacute;marre l&rsquo;ApplicationContext complet</div>
+              <div class="ioc-sbt-items">
+                <span class="ioc-sbt-item">Component Scan complet</span>
+                <span class="ioc-sbt-item">R&eacute;solution du graphe entier</span>
+                <span class="ioc-sbt-item">Auto-Configuration active</span>
+                <span class="ioc-sbt-item">Toute l&rsquo;infra (DB, HTTP&hellip;)</span>
+              </div>
+              <div class="ioc-sbt-cost">&#9888; Puissant mais co&ucirc;teux &mdash; tout le m&eacute;canisme est activ&eacute;</div>
+            </div>
+
+          </div><!-- /ioc-col-right -->
+
+        </div><!-- /ioc-scene -->
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE 8 — SLICE TESTING (théorie)
+           Fragments : 0=tranches 1=@WebMvcTest 2=couche-service 3=@JdbcTest 4=note autres
+           ════════════════════════════════════════════════════════════════════ -->
+      <section>
+        <aside class="notes">
+          <div data-notes-fragment="-1">
+            <strong>ÉTAT INITIAL — @SpringBootTest : tout le graphe</strong>
+            <ul>
+              <li><code>@SpringBootTest</code> charge TOUT le mécanisme Spring</li>
+              <li>Nécessaire pour les tests E2E — mais excessif pour la majorité des tests</li>
+              <li>❓ "A-t-on besoin de charger la DB pour tester qu'un endpoint renvoie 400 ?"</li>
+              <li>→ L'idée du slice testing : ne charger que la tranche nécessaire</li>
+            </ul>
+          </div>
+          <div data-notes-fragment="0">
+            <strong>Les 3 couches</strong>
+            <ul>
+              <li>L'application est organisée en couches, chacune avec ses propres beans Spring</li>
+              <li><strong>Web</strong> : Controllers, Filters, ControllerAdvice, Jackson, Security</li>
+              <li><strong>Métier</strong> : logique métier — idéalement sans dépendance Spring</li>
+              <li><strong>Persistence</strong> : Repositories, JdbcTemplate, DataSource, Flyway</li>
+              <li>Spring Boot propose une annotation de slice pour chaque couche</li>
+            </ul>
+          </div>
+          <div data-notes-fragment="1">
+            <strong>@WebMvcTest</strong>
+            <ul>
+              <li>Charge uniquement la couche Web — pas de Services, pas de DB</li>
+              <li>Dépendances manquantes simulées avec <code>@MockitoBean</code></li>
+              <li>Pas de serveur HTTP réel — MockMvc simule les requêtes en mémoire</li>
+              <li>Cas d'usage : codes HTTP, sérialisation JSON, <code>@ControllerAdvice</code>, filtres sécurité</li>
+            </ul>
+          </div>
+          <div data-notes-fragment="2">
+            <strong>Couche Métier : pas de slice Spring dédiée</strong>
+            <ul>
+              <li>Le code métier bien conçu n'a pas de dépendance Spring</li>
+              <li>Injection par constructeur → testable directement avec JUnit + Mockito</li>
+              <li>Pas besoin de démarrer un contexte Spring → test unitaire, le plus rapide</li>
+              <li>⚠ Si votre code métier dépend de Spring → signe d'architecture à revoir</li>
+            </ul>
+          </div>
+          <div data-notes-fragment="3">
+            <strong>@JdbcTest</strong>
+            <ul>
+              <li>Charge uniquement la couche Persistence — pas de Controllers, pas de Services</li>
+              <li>DataSource + JdbcTemplate ; ici Testcontainers PostgreSQL pour une vraie DB</li>
+              <li>Transactions rollback-ées automatiquement → tests indépendants, pas de pollution</li>
+              <li>Cas d'usage : requêtes SQL natives, mappings <code>RowMapper</code>, contraintes DB, migrations Flyway</li>
+            </ul>
+          </div>
+          <div data-notes-fragment="4">
+            <strong>Autres slices</strong>
+            <ul>
+              <li><code>@RestClientTest</code> → clients HTTP sortants (RestTemplate, RestClient)</li>
+              <li><code>@JsonTest</code> → sérialisation/désérialisation JSON uniquement</li>
+              <li>Principe identique pour tous : charger le minimum nécessaire</li>
+            </ul>
+            <strong>Clôture</strong>
+            <ul>
+              <li>"On a maintenant les outils théoriques pour comprendre les tests qu'on va écrire"</li>
+            </ul>
+          </div>
+        </aside>
+        <h2>Slice Testing &mdash; un sous-graphe cibl&eacute;</h2>
+        <div class="slice-scene">
+
+          <!-- Grille 3 lignes × 2 colonnes -->
+          <div class="slice-grid">
+
+            <!-- Ligne 1 : Couche Web | @WebMvcTest -->
+            <div class="slice-layer slice-layer-web fragment" data-fragment-index="0">
+              Couche<br>Web
+            </div>
+            <div class="slice-card slice-card-web fragment" data-fragment-index="1">
+              <div class="slice-card-head">
+                <span class="slice-card-title">@WebMvcTest</span>
+                <span class="slice-cost-badge slice-cost-low">Co&ucirc;t faible</span>
+              </div>
+              <div class="archi-business-separator"></div>
+              <div class="slice-section-label">Charg&eacute;</div>
+              <div class="slice-beans-row">
+                <span class="archi-algo-step">Controllers</span>
+                <span class="archi-algo-step">ControllerAdvice</span>
+                <span class="archi-algo-step">Filters</span>
+                <span class="archi-algo-step">MockMvc</span>
+                <span class="archi-algo-step">Jackson</span>
+                <span class="archi-algo-step">Security</span>
+              </div>
+              <div class="slice-section-label-out">Non charg&eacute;</div>
+              <div class="slice-beans-out">
+                <span class="archi-algo-step-out">Services</span>
+                <span class="archi-algo-step-out">Repositories</span>
+                <span class="archi-algo-step-out">DataSource</span>
+              </div>
+              <div class="slice-note">
+                Services simul&eacute;s avec <code>@MockitoBean</code> &mdash;
+                teste le contrat HTTP, la s&eacute;rialisation et la s&eacute;curit&eacute;
+              </div>
+            </div>
+
+            <!-- Ligne 2 : Couche Métier | pas de slice dédié -->
+            <div class="slice-layer slice-layer-service fragment" data-fragment-index="2">
+              Couche<br>M&eacute;tier
+            </div>
+            <div class="slice-card slice-card-service fragment" data-fragment-index="2">
+              <span class="slice-card-service-label">Pas de slice d&eacute;di&eacute;e</span>
+            </div>
+
+            <!-- Ligne 3 : Couche Persistence | @JdbcTest -->
+            <div class="slice-layer slice-layer-persistence fragment" data-fragment-index="0">
+              Couche<br>Persistence
+            </div>
+            <div class="slice-card slice-card-jpa fragment" data-fragment-index="3">
+              <div class="slice-card-head">
+                <span class="slice-card-title-pg">@JdbcTest</span>
+                <span class="slice-cost-badge slice-cost-low">Co&ucirc;t faible</span>
+              </div>
+              <div class="archi-business-separator"></div>
+              <div class="slice-section-label">Charg&eacute;</div>
+              <div class="slice-beans-row">
+                <span class="archi-algo-step-pg">Repositories</span>
+                <span class="archi-algo-step-pg">JdbcTemplate</span>
+                <span class="archi-algo-step-pg">DataSource</span>
+                <span class="archi-algo-step-pg">Flyway</span>
+                <span class="archi-algo-step-pg">Transactions</span>
+              </div>
+              <div class="slice-section-label-out">Non charg&eacute;</div>
+              <div class="slice-beans-out">
+                <span class="archi-algo-step-out">Controllers</span>
+                <span class="archi-algo-step-out">Services</span>
+                <span class="archi-algo-step-out">Security</span>
+              </div>
+              <div class="slice-note">
+                Transactions rollback&eacute;es automatiquement &mdash;
+                teste les requ&ecirc;tes SQL natives sans serveur web
+              </div>
+            </div>
+
+          </div><!-- /slice-grid -->
+
+          <!-- Frag 4 : note autres slices -->
+          <div class="slice-others-note fragment" data-fragment-index="4">
+            Autres exemples selon le contexte :
+            <code>@DataMongoTest</code>, <code>@DataJpaTest</code>, <code>@DataRedisTest</code>&hellip;
+            &mdash; m&ecirc;me principe, sous-graphe cibl&eacute;.
+          </div>
+
+        </div><!-- /slice-scene -->
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE À VOUS — REFACTO 1 : slice testing
+           ════════════════════════════════════════════════════════════════════ -->
+      <section>
+        <aside class="notes">
+          <strong>À vous — Refacto 1 (slice).</strong> Départ : <code>atelier/1</code> ;
+          solution sur <code>atelier/2</code>.
+          <ul>
+            <li>Objectif : remplacer <code>@SpringBootTest</code> par la tranche minimale par couche.</li>
+            <li>Controller &rarr; <code>@WebMvcTest</code> (service en <code>@MockitoBean</code>)</li>
+            <li>Repository &rarr; <code>@JdbcTest</code> </li>
+            <li>Couche métier &rarr; TU pur JUnit + Mockito, sans contexte Spring.</li>
+            <li><code>@ActiveProfiles("test")</code> conservé sur les slices.</li>
+          </ul>
+        </aside>
+
+        <h2>À vous &mdash; Refacto 1 : slice testing</h2>
+
+        <div class="rework-grid">
+          <div class="rework-col rework-col-why rework-accent-pg">
+            <div class="rework-col-title">Objectif</div>
+            <ul class="rework-bullets">
+              <li>Remplacer <code>@SpringBootTest</code> (tout le graphe) par la tranche
+                  minimale propre &agrave; chaque couche</li>
+              <li>Des tests plus rapides, qui n'exercent que ce qu'ils ciblent</li>
+            </ul>
+          </div>
+          <div class="rework-col rework-col-howto">
+            <div class="rework-col-title">Consignes</div>
+            <ol class="rework-steps">
+              <li>Controller &rarr; <code>@WebMvcTest</code> (service en <code>@MockitoBean</code></li>
+              <li>Repository &rarr; <code>@JdbcTest</code> </code></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="rework-tips fragment">
+          <div class="rework-tips-title">&#128161;&nbsp;Tips</div>
+          <ul class="rework-tips-list">
+            <li><code>@WebMvcTest</code> &rarr; ajouter <code>@Import(SecurityConfig.class)</code></li>
+            <li><code>@JdbcTest</code> &rarr; supprimer le <code>@Transactional</code> inutile</li>
+          </ul>
+        </div>
+
+        <div class="rework-hint">départ <code>atelier/1</code></div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE 10 — REFACTO 2 : MockWebServer (intention + consignes)
+           ════════════════════════════════════════════════════════════════════ -->
+      <section>
+        <aside class="notes">
+          <strong>À vous — Refacto 2 (MockWebServer).</strong> Départ : <code>atelier/2-mockwebserver</code>.
+          <ul>
+            <li>Point de départ simplifié : le start/stop du <code>MockWebServer</code> et son intégration
+              au test sont déjà gérés ; un JSON résultat est disponible avec un helper pour le lire.</li>
+            <li>"Pourquoi pas Mockito sur le client" : mocker <code>DinoTypeApiClient</code> revient à
+              tester Mockito &mdash; on perd la chaîne RestClient + sérialisation + mapping HTTP.</li>
+            <li>À faire : pas de <code>@SpringBootTest</code>, renvoyer un JSON comme body, utiliser des
+              <code>MockResponse</code> (enqueue) au lieu des mocks, supprimer les <code>@MockitoBean</code>.</li>
+            <li>Couvrir nominal (200), inconnu (404 &rarr; exception métier), erreur serveur (500).</li>
+          </ul>
+        </aside>
+
+        <h2>Refacto 2 &mdash; MockWebServer sur l&rsquo;API DinoType</h2>
+
+        <div class="rework-grid">
+          <div class="rework-col rework-col-why rework-accent-pg">
+            <div class="rework-col-title">Objectif</div>
+            <ul class="rework-bullets">
+              <li>Tester la vraie cha&icirc;ne HTTP (s&eacute;rialisation, mapping d&rsquo;erreurs)
+                  &mdash; plut&ocirc;t que mocker le client (qui revient &agrave; tester Mockito)</li>
+              <li>Sans contexte Spring &mdash; test rapide et fid&egrave;le au comportement r&eacute;seau</li>
+            </ul>
+          </div>
+
+          <div class="rework-col rework-col-howto">
+            <div class="rework-col-title">Consignes</div>
+            <ol class="rework-steps">
+              <li>Pas de <code>@SpringBootTest</code></li>
+              <li>Renvoyer le <strong>JSON r&eacute;sultat</strong> comme <em>body</em> de la r&eacute;ponse (via le helper)</li>
+              <li>Utiliser des <code>MockResponse</code> HTTP (<code>enqueue</code>) &agrave; la place des mocks</li>
+              <li>Supprimer les <code>@MockitoBean</code> &mdash; ne plus mocker</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="rework-hint">&rarr; <code>enqueue</code> &amp; d&eacute;pendance en slide suivante</div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE 11 — REFACTO 2 : MockWebServer (enqueue) + dépendance
+           ════════════════════════════════════════════════════════════════════ -->
+      <section>
+        <aside class="notes">
+          <strong>MockWebServer &amp; enqueue :</strong>
+          <ul>
+            <li><code>MockWebServer</code> = vrai serveur HTTP local (okhttp). Ici, le démarrage/arrêt
+              et le branchement sur le client sont déjà fournis.</li>
+            <li><code>enqueue(MockResponse)</code> empile les réponses dans une <strong>file FIFO</strong> :
+              chaque requête entrante consomme la suivante (200 &rarr; 404 &rarr; 500…).</li>
+            <li>Le body = le JSON résultat (helper de lecture fourni). <code>String.formatted(...)</code>
+              aide à injecter des valeurs dans un gabarit JSON.</li>
+            <li>1 dépendance : <code>com.squareup.okhttp3:mockwebserver</code> (déjà au pom).</li>
+          </ul>
+        </aside>
+
+        <h2>MockWebServer &mdash; <code>enqueue</code> &amp; d&eacute;pendance</h2>
+
+        <div class="rework-grid">
+          <div class="rework-col rework-col-why rework-accent-pg">
+            <div class="rework-col-title">Une file de r&eacute;ponses (FIFO)</div>
+            <p class="rework-mini">
+              <code>enqueue(...)</code> empile les r&eacute;ponses dans une file ;
+              chaque requ&ecirc;te consomme la suivante (200 &rarr; 404 &rarr; 500&hellip;).
+            </p>
+            <pre class="rework-code"><code class="language-java" data-trim>// serveur d&eacute;j&agrave; d&eacute;marr&eacute; &amp; branch&eacute;
+server.enqueue(new MockResponse()
+    .setResponseCode(200)
+    .setBody(jsonBody)); // JSON r&eacute;sultat</code></pre>
+          </div>
+
+          <div class="rework-col rework-col-howto">
+            <div class="rework-col-title">D&eacute;pendance Maven</div>
+            <div class="rework-pom-banner rework-accent-pg rework-banner-inline">
+              &#10003;&nbsp; D&eacute;j&agrave; dans votre <code>pom.xml</code>
+            </div>
+            <pre class="rework-code"><code class="language-xml" data-trim data-noescape>&lt;dependency&gt;
+    &lt;groupId&gt;com.squareup.okhttp3&lt;/groupId&gt;
+    &lt;artifactId&gt;mockwebserver&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+          </div>
+        </div>
+
+        <div class="rework-context">
+          <strong>D&eacute;j&agrave; fourni :</strong> d&eacute;marrage / arr&ecirc;t du <code>MockWebServer</code>
+          et son int&eacute;gration au test ; un JSON r&eacute;sultat est disponible avec un helper pour le lire.
+        </div>
+
+        <div class="rework-tips fragment">
+          <div class="rework-tips-title">&#128161;&nbsp;Tips</div>
+          <ul class="rework-tips-list">
+            <li><code>String.formatted(Object... args)</code>: interpolation %s. Exemple :
+                <code>"{\"species\": \"%s\"}".formatted(species)</code></li>
+          </ul>
+        </div>
+
+        <div class="rework-hint">branche <code>atelier/2-mockwebserver</code></div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE — REFACTO 3 : Testcontainers PostgreSQL (pourquoi + consignes + dépendance)
+           ════════════════════════════════════════════════════════════════════ -->
+      <section>
+        <aside class="notes">
+          <strong>Refacto 3 &mdash; Testcontainers PostgreSQL.</strong> Branche <code>atelier/3-testcontainers</code>.
+          <ul>
+            <li>Pourquoi quitter H2 : H2 en mode PG est une simulation. Requêtes natives, types,
+              index, migrations Flyway peuvent passer en H2 et casser en PG réel.</li>
+            <li><code>jdbc:tc:postgresql:16:///dino</code> : le driver Testcontainers s'interpose et
+              démarre un container à la 1re connexion JDBC &mdash; il suffit de changer l'URL.</li>
+            <li>La dépendance qui active <code>jdbc:tc:</code> est <code>org.testcontainers:postgresql</code> :
+              elle embarque transitivement <code>org.testcontainers:jdbc</code> (le driver du schéma <code>jdbc:tc:</code>).
+              Ce n'est PAS <code>spring-boot-testcontainers</code> / <code>@ServiceConnection</code>,
+              qui relève de l'approche programmatique.</li>
+            <li><code>@AutoConfigureTestDatabase(replace = NONE)</code> sur <code>@JdbcTest</code> :
+              sinon Spring remplace la datasource par une base embarquée.</li>
+          </ul>
+        </aside>
+
+        <h2>Refacto 3 &mdash; Testcontainers pour PostgreSQL</h2>
+
+        <div class="rework-grid">
+          <div class="rework-col rework-col-why rework-accent-pg fragment" data-fragment-index="0">
+            <div class="rework-col-title">Pourquoi</div>
+            <ul class="rework-bullets">
+              <li>H2 en mode PG = approximation avec quelques comportements diff&eacute;rents</li>
+              <li>Vrais types, vrais index, vraies migrations Flyway &mdash; comme en prod</li>
+            </ul>
+          </div>
+          <div class="rework-col rework-col-howto fragment" data-fragment-index="0">
+            <div class="rework-col-title">Consignes</div>
+            <ol class="rework-steps">
+              <li>Utiliser une image Testcontainers PostgreSQL via l&rsquo;URL <code>jdbc:tc:postgresql</code></li>
+            </ol>
+            <pre class="rework-code"><code class="language-yaml" data-trim># application-test.yml
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:16://dino</code></pre>
+          </div>
+        </div>
+
+        <div class="r3-dep fragment" data-fragment-index="1">
+          <div class="r3-dep-text">
+            <div class="r3-dep-label">
+              <span class="r3-dep-badge">&#10003;&nbsp;d&eacute;j&agrave; au pom.xml</span>
+              <code>org.testcontainers:postgresql</code> active <code>jdbc:tc:postgresql</code>
+            </div>
+            <p class="rework-mini">
+              Elle embarque <code>org.testcontainers:jdbc</code> &mdash; le driver qui g&egrave;re le sch&eacute;ma
+              <code>jdbc:tc:</code> et d&eacute;marre le container &agrave; la 1<sup>re</sup> connexion.
+            </p>
+            <p class="rework-mini r3-dep-aside">
+              D&eacute;duction auto du driver depuis l&rsquo;URL <code>jdbc:tc:</code> g&eacute;r&eacute;e nativement par Spring Boot <strong>depuis 2.3.0</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="rework-hint">branche <code>atelier/3-testcontainers</code></div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE — LES 3 SERVICES MÉTIER (schéma : responsabilités + chaîne)
+           Support visuel pour introduire le coeur métier avant le BUG-1042.
+           ════════════════════════════════════════════════════════════════════ -->
+      <section>
+        <aside class="notes">
+          <strong>Les 3 services m&eacute;tier &mdash; la cha&icirc;ne d'assignation.</strong>
+          <ul>
+            <li><code>DinoAssignmentService</code> : le chef d'orchestre. Re&ccedil;oit un dino,
+              cherche le premier enclos adapt&eacute; (climat, habitat, surface/eau/nourriture) et persiste.
+              S'appuie sur <code>ParcRepository</code> pour les donn&eacute;es.</li>
+            <li><code>DinoSpeciesService</code> : traduit un dino en esp&egrave;ce + ses besoins
+              (surface, eau, nourriture), en croisant l'API externe et le registre local JSON.</li>
+            <li><code>DinoTypeService</code> : adaptateur de l'API REST externe (UUID &rarr; type/esp&egrave;ce) ;
+              transforme un 404 en <code>Optional.empty()</code>.</li>
+            <li>Sens de la d&eacute;pendance : <strong>Assignment &rarr; Species &rarr; Type</strong>,
+              cha&icirc;ne lin&eacute;aire, sans cycle. C'est <code>DinoAssignmentService</code> qui porte
+              la logique parc/enclos &mdash; cl&eacute; pour comprendre le BUG-1042 qui suit.</li>
+          </ul>
+        </aside>
+
+        <h2>Les 4 services m&eacute;tier</h2>
+
+        <div class="svc-diagram">
+
+          <!-- Service 1 : orchestrateur -->
+          <div class="svc-card svc-card-assign">
+            <div class="svc-card-role">Orchestrateur</div>
+            <div class="svc-card-name">DinoAssignmentService</div>
+            <div class="svc-card-desc">
+              Affecte un dino au premier enclos adapt&eacute;
+              <span class="svc-card-detail">climat &middot; habitat &middot; surface / eau / nourriture</span>
+            </div>
+            <div class="svc-card-deps">
+              <span class="svc-dep-label">d&eacute;pend de</span>
+              <span class="svc-dep-tag">ParcRepository</span>
+              <span class="svc-dep-tag">DinoSpeciesService</span>
+            </div>
+          </div>
+
+          <div class="svc-arrow">
+            <span class="svc-arrow-line"></span>
+            <span class="svc-arrow-note">esp&egrave;ce&nbsp;+&nbsp;besoins</span>
+          </div>
+
+          <!-- Service 2 : résolution espèce -->
+          <div class="svc-card svc-card-species">
+            <div class="svc-card-role">R&eacute;solution m&eacute;tier</div>
+            <div class="svc-card-name">DinoSpeciesService</div>
+            <div class="svc-card-desc">
+              R&eacute;sout l'esp&egrave;ce d'un dino et ses besoins
+              <span class="svc-card-detail">API externe &times; registre local (JSON)</span>
+            </div>
+            <div class="svc-card-deps">
+              <span class="svc-dep-label">d&eacute;pend de</span>
+              <span class="svc-dep-tag">DinoTypeService</span>
+              <span class="svc-dep-tag">DinoSpeciesRegistry</span>
+            </div>
+          </div>
+
+          <div class="svc-arrow">
+            <span class="svc-arrow-line"></span>
+            <span class="svc-arrow-note">API&nbsp;+&nbsp;registre</span>
+          </div>
+
+          <!-- Services 3 & 4 : sources de DinoSpeciesService -->
+          <div class="svc-branch">
+
+            <!-- Service 3 : adaptateur API externe -->
+            <div class="svc-card svc-card-type">
+              <div class="svc-card-role">Adaptateur externe</div>
+              <div class="svc-card-name">DinoTypeService</div>
+              <div class="svc-card-desc">
+                API REST des types &mdash; UUID&nbsp;&rarr;&nbsp;esp&egrave;ce
+                <span class="svc-card-detail">404 &rarr; <code>Optional.empty()</code></span>
+              </div>
+              <div class="svc-card-deps">
+                <span class="svc-dep-label">d&eacute;pend de</span>
+                <span class="svc-dep-tag">DinoTypeApiClient</span>
+              </div>
+            </div>
+
+            <!-- Service 4 : registre local JSON -->
+            <div class="svc-card svc-card-registry">
+              <div class="svc-card-role">Registre local</div>
+              <div class="svc-card-name">DinoSpeciesRegistry</div>
+              <div class="svc-card-desc">
+                Esp&egrave;ces&nbsp;+&nbsp;besoins charg&eacute;s d'un JSON
+                <span class="svc-card-detail">nom d'esp&egrave;ce &rarr; <code>DinoSpecies</code></span>
+              </div>
+              <div class="svc-card-deps">
+                <span class="svc-dep-label">source</span>
+                <span class="svc-dep-tag">classpath:dino-species.json</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE — REFACTO 4 : BUG-1042 (présentation du bug)
+           ════════════════════════════════════════════════════════════════════ -->
+      <section>
+        <aside class="notes">
+          <strong>Refacto 4 &mdash; BUG-1042.</strong> Départ <code>atelier/4</code> (test vert, bug NON reproduit).
+          <ul>
+            <li>Symptôme prod : un T-Rex (200 m² requis) est affecté à un enclos forêt de 220 m²
+              qui héberge déjà un Velociraptor (50 m²). 220 − 50 = 170 &lt; 200 : l'enclos aurait dû être refusé.</li>
+            <li>Cause : les ressources consommées par les dinos déjà présents sont ignorées.
+              Le bug n'apparaît que si l'enclos contient déjà un dino.</li>
+            <li>Mission : un test avec des mocks reste vert (on stubbe ce qu'on croit vrai) ; en passant
+              la couche service en réel (sans Spring), le bug se reproduit, puis on corrige.</li>
+          </ul>
+        </aside>
+
+        <h2>Refacto 4 &mdash; BUG-1042 : enclos sur-rempli</h2>
+
+        <div class="rework-grid">
+          <div class="rework-col rework-col-why rework-accent-bug">
+            <div class="rework-col-title">Le sympt&ocirc;me (prod)</div>
+            <ul class="rework-bullets">
+              <li>Un <strong>T-Rex</strong> (200 m&sup2; requis) est affect&eacute; à un enclos for&ecirc;t de
+                  <strong>220 m&sup2;</strong> d&eacute;j&agrave; occup&eacute; par un Velociraptor (50 m&sup2;)</li>
+              <li>220 &minus; 50 = 170 m&sup2; &lt; 200 &rarr; l'enclos aurait d&ucirc; &ecirc;tre refus&eacute;</li>
+              <li>Le T-Rex a pourtant été affecté à cet enclos, c'est un carnage !</li>
+            </ul>
+          </div>
+          <div class="rework-col rework-col-howto">
+            <div class="rework-col-title">Consignes</div>
+            <ol class="rework-steps">
+              <li>On a reproduit le cas de test dans un test, il reste <strong class="test-vert">vert</strong> : pourquoi&nbsp;?</li>
+              <li>Faire en sorte de réussir à faire passer le test à <strong class="test-rouge">rouge</strong>  en corrigeant <code>DinoAssignmentServiceImplTest</code></li>
+              <li>Bonus : Fix le bug</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="rework-tips fragment">
+          <div class="rework-tips-title">&#128161;&nbsp;Tips</div>
+          <ul class="rework-tips-list">
+            <li>Extension Mockito : <code>@ExtendWith(MockitoExtension.class)</code></li>
+            <li>Des m&eacute;thodes <em>helpers</em> existent dans le test pour mutualiser au max
+                la gestion des mocks et r&eacute;duire les impacts</li>
+          </ul>
+        </div>
+
+        <div class="rework-hint">d&eacute;part <code>atelier/4</code> &middot; le bug ne sort que si l'enclos est d&eacute;j&agrave; occup&eacute;</div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE — REFACTO 5 : FEAT-2077 (présentation de la feature)
+           ════════════════════════════════════════════════════════════════════ -->
+      <section>
+        <aside class="notes">
+          <strong>Refacto 5 &mdash; FEAT-2077.</strong> Départ <code>atelier/5</code> (le code ne compile pas :
+          la signature du repository a changé), puis <code>atelier/6</code> (préparation des fakes).
+          <ul>
+            <li>Règle : seuls les parcs au statut <code>OUVERT</code> sont candidats. Un parc fermé ne reçoit
+              jamais de dino, même si un enclos conviendrait.</li>
+            <li>~5 lignes de prod. L'intérêt est la diff CÔTÉ TESTS : mocks vs fakes in-memory.</li>
+            <li>atelier/5 : adapter les stubs Mockito (commit jetable). atelier/6 : remplacer les mocks par
+              des fakes, puis ajouter le filtre statut. Observer comme la diff fakes est plus petite et lisible.</li>
+          </ul>
+        </aside>
+
+        <h2>Refacto 5 &mdash; FEAT-2077 : parcs non ouverts</h2>
+
+        <div class="rework-grid">
+          <div class="rework-col rework-col-why rework-accent-feat">
+            <div class="rework-col-title">Feature</div>
+            <ul class="rework-bullets">
+              <li>Seuls les parcs <code>OUVERT</code> sont candidats &agrave; l'affectation</li>
+              <li>Un parc non <code>OUVERT</code> ne re&ccedil;oit jamais de dino, m&ecirc;me si un enclos conviendrait</li>
+              <li>~5 lignes de prod - filtre au niveau Repository</li>
+            </ul>
+          </div>
+          <div class="rework-col rework-col-howto">
+            <div class="rework-col-title">Consignes</div>
+            <ol class="rework-steps">
+              <li><code>DinoAssignmentServiceImplTest</code> ne compile plus : corriger</li>
+              <li>Quelle est la valeur/signification métier de ces corrections ?</li>
+              <li>Quelle alternative/amélioration ?</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="rework-hint">d&eacute;part <code>atelier/5</code> (ne compile pas)</div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE — REFACTO 5 (suite) : FEAT-2077 avec les fakes
+           ════════════════════════════════════════════════════════════════════ -->
+      <section>
+        <aside class="notes">
+          <strong>Refacto 5 (suite) &mdash; les fakes.</strong> Départ <code>atelier/6-feat-fakes</code> :
+          remplacer les mocks par des fakes in-memory pour des tests 100&nbsp;% services, plus robustes et
+          expressifs ; corriger le fake concerné pour intégrer la feature (filtre statut).
+        </aside>
+
+        <h2>Refacto 5 &mdash; FEAT-2077 : avec les fakes</h2>
+
+        <div class="rework-grid">
+          <div class="rework-col rework-col-why rework-accent-feat">
+            <div class="rework-col-title">Objectif</div>
+            <ul class="rework-bullets">
+              <li>Rendre notre code de test plus <strong>robuste</strong> et plus <strong>expressif</strong> qu'avec les mocks</li>
+              <li>Mutualiser la gestion du code en dehors du service pour faciliter la pratique des tests <strong>100&nbsp;% services</strong></li>
+            </ul>
+          </div>
+          <div class="rework-col rework-col-howto">
+            <div class="rework-col-title">Consignes</div>
+            <ol class="rework-steps">
+              <li>Utiliser les <strong>fakes</strong> de nos interfaces &mdash; de simples structures de donn&eacute;es &mdash;
+                  fournis dans <code>DinoAssignmentServiceImplTest</code></li>
+              <li>Corriger un des fakes pour prendre en compte la feature</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="rework-hint">d&eacute;part <code>atelier/6-feat-fakes</code></div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE — TESTS D'INTÉGRATION (atelier/7-it)
+           ════════════════════════════════════════════════════════════════════ -->
+      <section>
+        <aside class="notes">
+          <strong>Tests d'int&eacute;gration &mdash; atelier/7-it.</strong> On valide des sc&eacute;narios m&eacute;tier
+          de bout en bout, &agrave; travers le vrai point d'entr&eacute;e technique (l'API REST), en isolant
+          uniquement les d&eacute;pendances externes via Testcontainers / MockWebServer. Approche bo&icirc;te noire :
+          on n'inspecte pas l'int&eacute;rieur, on caract&eacute;rise la r&eacute;ponse.
+        </aside>
+
+        <h2>Tests d'int&eacute;gration &mdash; un exemple</h2>
+
+        <div class="rework-grid rework-grid-single">
+          <div class="rework-col rework-col-why rework-accent-pg">
+            <div class="rework-col-title">Principes</div>
+            <ul class="rework-bullets">
+              <li><strong>Testcontainers / MockWebServer</strong> pour les d&eacute;pendances externes</li>
+              <li>On passe par les <strong>points d'entr&eacute;e technique</strong> (l'API REST dans notre exemple)
+                  pour ex&eacute;cuter nos sc&eacute;narios m&eacute;tier</li>
+              <li>Test en mode <strong>&laquo;&nbsp;bo&icirc;te noire&nbsp;&raquo;</strong> : on envoie des donn&eacute;es et on
+                  caract&eacute;rise ce que l'on re&ccedil;oit via <strong>comparaison JSON</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="rework-hint"><code>atelier/7-it</code></div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           SLIDE — MERCI + FEEDBACK (OpenFeedback)
+           ════════════════════════════════════════════════════════════════════ -->
+      <section class="slide-closing">
+        <h2>Merci d'avoir assist&eacute; &agrave; l'atelier&nbsp;!</h2>
+        <p class="intro-text">
+          Votre retour m'aide &agrave; l'am&eacute;liorer&nbsp;: je suis donc preneur de feedback&nbsp;!
+        </p>
+        <div class="poll-content">
+          <div class="poll-qr">
+            <img src="assets/qr-openfeedback.svg"
+                 alt="QR code OpenFeedback"
+                 class="poll-qr-img">
+          </div>
+        </div>
+      </section>
+
+
+    </div>
+  </div>
+
+  <!-- Reveal.js core + plugins (vendored) -->
+  <script src="vendor/reveal/reveal.js"></script>
+  <script src="vendor/reveal/plugin/highlight/highlight.js"></script>
+  <script src="vendor/reveal/plugin/notes/notes.js"></script>
+
+  <!-- Initialize Reveal.js -->
+  <script>
+    Reveal.initialize({
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+      hash: true,
+      center: false,
+      controls: true,
+      progress: true,
+      transition: 'fade',
+      transitionSpeed: 'fast',
+      backgroundTransition: 'none',
+      plugins: [RevealHighlight, RevealNotes]
+    });
+
+    // ── Synchronisation notes speaker ↔ fragments ──────────────────────────
+    // Chaque <aside class="notes"> contient des <span data-notes-fragment="N">
+    // On affiche uniquement le bloc correspondant au fragment courant.
+    // data-notes-fragment="-1" = état initial (avant le premier fragment).
+
+    function syncNotes(slideEl, fragmentIndex) {
+      var notes = slideEl.querySelector('aside.notes');
+      if (!notes) return;
+      var divs = notes.querySelectorAll('[data-notes-fragment]');
+      if (!divs.length) return;
+
+      // Trouver le div dont l'index <= fragmentIndex et le plus proche
+      var active = null;
+      var activeIdx = -Infinity;
+      divs.forEach(function(div) {
+        var idx = parseInt(div.getAttribute('data-notes-fragment'), 10);
+        if (idx <= fragmentIndex && idx > activeIdx) {
+          activeIdx = idx;
+          active = div;
+        }
+      });
+
+      // Masquer tous, afficher le sélectionné
+      divs.forEach(function(div) {
+        div.style.display = 'none';
+      });
+      if (active) active.style.display = 'block';
+    }
+
+    Reveal.on('ready', function(event) {
+      syncNotes(event.currentSlide, -1);
+    });
+
+    Reveal.on('slidechanged', function(event) {
+      syncNotes(event.currentSlide, -1);
+    });
+
+    Reveal.on('fragmentshown', function(event) {
+      var slide = event.fragment.closest('section');
+      var idx = parseInt(event.fragment.getAttribute('data-fragment-index'), 10);
+      syncNotes(slide, idx);
+    });
+
+    Reveal.on('fragmenthidden', function(event) {
+      var slide = event.fragment.closest('section');
+      // Recalculer l'index du fragment visible le plus haut
+      var visibleFragments = slide.querySelectorAll('.fragment.visible');
+      var maxIdx = -1;
+      visibleFragments.forEach(function(f) {
+        var idx = parseInt(f.getAttribute('data-fragment-index'), 10);
+        if (idx > maxIdx) maxIdx = idx;
+      });
+      syncNotes(slide, maxIdx);
+    });
+    // ───────────────────────────────────────────────────────────────────────
+  </script>
+</body>
+</html>

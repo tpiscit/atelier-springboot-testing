@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:16://testdb
+
+dinotype:
+  api:
+    url: http://localhost:8081

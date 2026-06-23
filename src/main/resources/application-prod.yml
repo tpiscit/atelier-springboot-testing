@@ -1,0 +1,8 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+dinotype:
+  api:
+    url: ${DINOTYPE_API_URL:https://real-dinotype-api.com}

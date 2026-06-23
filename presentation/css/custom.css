@@ -1,0 +1,2599 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   CUSTOM CSS — Atelier Spring Boot Testing
+   Extends the Liksi light theme (liksi-light.css)
+   Uses Liksi design tokens: --midnight, --violet, --ash, --mauve, --blue, etc.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+
+/* ─── Additional color tokens for architecture diagram ───────────────────── */
+
+:root {
+  --c-pg: #336791;
+  --c-pg-light: rgba(51, 103, 145, 0.1);
+  --c-mongo: #4db33d;
+  --c-mongo-light: rgba(77, 179, 61, 0.1);
+  --c-rest: var(--mauve);
+  --c-rest-light: rgba(255, 0, 221, 0.08);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SLIDE 2 — WJB2C XP
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wjb2c-gif-container {
+  margin: 0 auto;
+  max-width: 600px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(23, 15, 35, 0.12);
+  border: 1px solid rgba(155, 64, 255, 0.15);
+}
+
+.wjb2c-gif {
+  width: 100%;
+  display: block;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SLIDE 3 — ARCHITECTURE DIAGRAM
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.archi-diagram {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
+  font-size: 0.9em;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.archi-column {
+  flex: 1;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Column headers */
+
+.archi-column-header {
+  font-weight: 700;
+  font-size: 1.1em;
+  padding: 7px 14px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
+
+.archi-header-api {
+  background: rgba(155, 64, 255, 0.1);
+  color: var(--violet);
+}
+
+.archi-header-business {
+  background: var(--gradient-accent);
+  color: #fff;
+}
+
+.archi-header-ext {
+  background: rgba(23, 15, 35, 0.06);
+  color: var(--ash);
+}
+
+/* Cards */
+
+.archi-card {
+  background: #ffffff;
+  border: 1.5px solid rgba(23, 15, 35, 0.1);
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: 0 2px 8px rgba(155, 64, 255, 0.04);
+  transition: box-shadow 0.2s;
+}
+
+.archi-card:hover {
+  box-shadow: 0 4px 16px rgba(155, 64, 255, 0.1);
+}
+
+.archi-card code {
+  display: block;
+  font-size: 0.82em;
+  color: var(--violet);
+  background: rgba(155, 64, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin: 3px 0;
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  overflow-wrap: anywhere;
+}
+
+.archi-card-label {
+  font-weight: 700;
+  font-size: 0.88em;
+  color: var(--midnight);
+  margin-bottom: 3px;
+}
+
+.archi-card-desc {
+  font-size: 0.8em;
+  color: var(--ash);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.archi-card-detail {
+  font-size: 0.85em;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.archi-card-primary {
+  border-color: var(--violet);
+  box-shadow: 0 2px 16px rgba(155, 64, 255, 0.12);
+  position: relative;
+}
+
+.archi-card-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-accent);
+  border-radius: 8px 8px 0 0;
+}
+
+.archi-card-primary code {
+  color: var(--mauve);
+  background: rgba(255, 0, 221, 0.08);
+}
+
+/* Database-specific cards */
+
+.archi-card-pg {
+  border-left: 4px solid var(--c-pg);
+}
+
+.archi-card-mongo {
+  border-left: 4px solid var(--c-mongo);
+}
+
+.archi-card-rest {
+  border-left: 4px solid var(--mauve);
+}
+
+.archi-card-badge {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.82em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.archi-card-pg .archi-card-badge {
+  background: var(--c-pg-light);
+  color: var(--c-pg);
+}
+
+.archi-card-mongo .archi-card-badge {
+  background: var(--c-mongo-light);
+  color: var(--c-mongo);
+}
+
+.archi-card-rest .archi-card-badge {
+  background: var(--c-rest-light);
+  color: var(--mauve);
+}
+
+/* Arrows between columns */
+
+.archi-arrows {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  padding: 0 6px;
+  min-width: 32px;
+}
+
+.archi-arrow-right {
+  width: 20px;
+  height: 2px;
+  background: var(--ash);
+  position: relative;
+  opacity: 0.5;
+}
+
+.archi-arrow-right::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: -4px;
+  border: solid var(--ash);
+  border-width: 0 2px 2px 0;
+  padding: 3px;
+  transform: rotate(-45deg);
+}
+
+/* Business block (center column) */
+
+.archi-business-block {
+  background: linear-gradient(135deg, rgba(155, 64, 255, 0.04) 0%, rgba(91, 64, 255, 0.02) 100%);
+  border: 2px solid var(--violet);
+  border-radius: 12px;
+  padding: 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.archi-business-name {
+  font-weight: 800;
+  font-size: 1.15em;
+  text-align: center;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.archi-business-separator {
+  height: 1px;
+  background: rgba(155, 64, 255, 0.15);
+  margin: 2px 0;
+}
+
+.archi-algo-title {
+  font-weight: 700;
+  font-size: 0.88em;
+  color: var(--midnight);
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.archi-algo-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+}
+
+.archi-algo-step {
+  display: inline-block;
+  background: rgba(155, 64, 255, 0.1);
+  color: var(--violet);
+  font-size: 0.78em;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(155, 64, 255, 0.15);
+}
+
+.archi-algo-desc {
+  font-size: 0.76em;
+  color: var(--ash);
+  text-align: center;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.archi-business-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+}
+
+.archi-service-tag {
+  display: inline-block;
+  background: rgba(23, 15, 35, 0.05);
+  color: var(--ash);
+  font-size: 0.7em;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SLIDE 4 — WORD WALL
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wordwall-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.wordwall-qr-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.wordwall-qr {
+  width: 220px;
+  height: 220px;
+  border: 2px solid rgba(155, 64, 255, 0.15);
+  border-radius: 12px;
+  padding: 8px;
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(155, 64, 255, 0.08);
+}
+
+.wordwall-url {
+  font-size: 0.44em;
+  color: var(--violet);
+  font-weight: 600;
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  background: rgba(155, 64, 255, 0.08);
+  padding: 4px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(155, 64, 255, 0.12);
+}
+
+.wordwall-cloud-section {
+  flex: 1;
+  min-width: 500px;
+  height: 400px;
+  position: relative;
+  background: rgba(23, 15, 35, 0.02);
+  border-radius: 16px;
+  border: 2px dashed rgba(155, 64, 255, 0.15);
+  overflow: hidden;
+}
+
+#wordwall-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.wordwall-placeholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.52em;
+  color: var(--ash);
+  font-style: italic;
+}
+
+.wordwall-placeholder.hidden {
+  display: none;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SHARED — variants PostgreSQL (utilisées par IoC & Slice Testing)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.archi-business-block-pg {
+  background: linear-gradient(135deg, rgba(51, 103, 145, 0.06) 0%, rgba(51, 103, 145, 0.02) 100%);
+  border: 2px solid var(--c-pg);
+  border-radius: 12px;
+  padding: 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.archi-business-name-pg {
+  font-weight: 800;
+  font-size: 1.15em;
+  text-align: center;
+  color: var(--c-pg);
+}
+
+.archi-algo-step-pg {
+  display: inline-block;
+  background: var(--c-pg-light);
+  color: var(--c-pg);
+  font-size: 0.78em;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(51, 103, 145, 0.2);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SLIDE IoC — conteneur principal
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ioc-scene {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  font-size: 0.78em;
+  width: 100%;
+  height: calc(100% - 60px);
+  margin-top: 8px;
+}
+
+/* Colonnes (gauche : graphe + résolution ; droite : @SpringBootTest + auto-config) */
+.ioc-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.ioc-col-left {
+  flex: 1.05;
+  justify-content: space-between;
+}
+
+.ioc-col-right {
+  flex: 1;
+  justify-content: space-between;
+}
+
+/* ── Graphe de beans (colonne gauche) ──────────────────────────────────────── */
+
+.ioc-graph-area {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ioc-scan-frame {
+  border: 2px dashed rgba(155, 64, 255, 0.35);
+  border-radius: 14px;
+  padding: 20px 16px 16px;
+  background: rgba(155, 64, 255, 0.02);
+  position: relative;
+}
+
+.ioc-scan-label {
+  position: absolute;
+  top: -13px;
+  left: 14px;
+  background: #f7f5fb;
+  padding: 0 8px;
+  font-size: 0.85em;
+  font-weight: 700;
+  color: var(--violet);
+  letter-spacing: 0.04em;
+}
+
+.ioc-ctx-label {
+  position: absolute;
+  top: -13px;
+  left: 14px;
+  background: #f7f5fb;
+  padding: 0 8px;
+  font-size: 0.85em;
+  font-weight: 700;
+  color: var(--violet);
+  letter-spacing: 0.04em;
+}
+
+.ioc-nodes {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ioc-node-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ioc-node {
+  flex: 1;
+  border: 2px solid rgba(23, 15, 35, 0.12);
+  border-radius: 8px;
+  padding: 9px 14px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  box-shadow: 0 2px 6px rgba(155, 64, 255, 0.05);
+}
+
+.ioc-node-annotation {
+  display: inline-block;
+  background: rgba(155, 64, 255, 0.1);
+  color: var(--violet);
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-size: 0.88em;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.ioc-node-name {
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-weight: 600;
+  font-size: 0.95em;
+  color: var(--midnight);
+  flex: 1;
+  text-align: right;
+}
+
+.ioc-singleton-badge {
+  display: inline-block;
+  background: rgba(23, 15, 35, 0.05);
+  border: 1px solid rgba(23, 15, 35, 0.12);
+  color: var(--ash);
+  font-size: 0.76em;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* Connecteur vertical dépendance */
+.ioc-dep-connector {
+  display: flex;
+  align-items: center;
+  padding: 2px 0 2px 28px;
+  gap: 6px;
+}
+
+.ioc-dep-line {
+  width: 2px;
+  height: 20px;
+  background: var(--violet);
+  opacity: 0.45;
+  position: relative;
+}
+
+.ioc-dep-line::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: -4px;
+  border: solid var(--violet);
+  border-width: 0 2px 2px 0;
+  padding: 3px;
+  transform: rotate(45deg);
+  opacity: 0.7;
+}
+
+.ioc-dep-label {
+  font-size: 0.78em;
+  color: var(--violet);
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* Proxy AOP */
+.ioc-proxy-wrap {
+  position: relative;
+  padding: 6px 4px 4px;
+}
+
+.ioc-proxy-frame {
+  position: absolute;
+  inset: 0;
+  border: 2px dashed #e06b1a;
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.ioc-proxy-label {
+  position: absolute;
+  top: -11px;
+  right: 10px;
+  background: #f7f5fb;
+  padding: 0 6px;
+  font-size: 0.78em;
+  font-weight: 700;
+  color: #e06b1a;
+}
+
+.ioc-aop-badges {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  justify-content: flex-end;
+}
+
+.ioc-aop-badge {
+  display: inline-block;
+  background: rgba(224, 107, 26, 0.08);
+  border: 1px solid rgba(224, 107, 26, 0.25);
+  color: #c25c10;
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-size: 0.78em;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+/* Note résolution graphe */
+.ioc-graph-note {
+  background: rgba(155, 64, 255, 0.04);
+  border-left: 3px solid var(--violet);
+  border-radius: 0 6px 6px 0;
+  padding: 8px 14px;
+  font-size: 0.9em;
+  color: var(--ash);
+  line-height: 1.5;
+}
+
+.ioc-graph-note strong {
+  color: var(--violet);
+  font-weight: 700;
+}
+
+/* Encart AutoConfiguration */
+.ioc-autoconfig-block {
+  background: rgba(23, 15, 35, 0.025);
+  border: 1.5px solid rgba(23, 15, 35, 0.1);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ioc-autoconfig-title {
+  font-weight: 700;
+  font-size: 0.92em;
+  color: var(--midnight);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ioc-autoconfig-title code {
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  background: rgba(155, 64, 255, 0.1);
+  color: var(--violet);
+  font-size: 0.88em;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.ioc-autoconfig-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.ioc-autoconfig-pill {
+  display: inline-block;
+  background: rgba(23, 15, 35, 0.05);
+  border: 1px solid rgba(23, 15, 35, 0.12);
+  color: var(--ash);
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-size: 0.78em;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.ioc-autoconfig-desc {
+  font-size: 1.08em;
+  color: var(--ash);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* ── Encart conséquences (colonne droite haut) ─────────────────────────────── */
+
+.ioc-consequences {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ioc-consequence-item {
+  background: #fff;
+  border: 1.5px solid rgba(23, 15, 35, 0.08);
+  border-radius: 8px;
+  padding: 9px 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  box-shadow: 0 1px 4px rgba(155, 64, 255, 0.04);
+}
+
+.ioc-consequence-title {
+  font-weight: 700;
+  font-size: 0.92em;
+  color: var(--midnight);
+}
+
+.ioc-consequence-desc {
+  font-size: 0.8em;
+  color: var(--ash);
+  line-height: 1.4;
+}
+
+/* ── Bloc @SpringBootTest (colonne droite bas) ─────────────────────────────── */
+
+.ioc-sbt-block {
+  grid-column: 2;
+  grid-row: 2;
+  background: linear-gradient(135deg, rgba(155, 64, 255, 0.07) 0%, rgba(91, 64, 255, 0.03) 100%);
+  border: 2px solid var(--violet);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ioc-sbt-annotation {
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-weight: 800;
+  font-size: 1.08em;
+  color: var(--violet);
+  text-align: center;
+}
+
+.ioc-sbt-desc {
+  font-size: 0.82em;
+  color: var(--ash);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.ioc-sbt-items {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ioc-sbt-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8em;
+  color: var(--midnight);
+  font-weight: 600;
+}
+
+.ioc-sbt-item::before {
+  content: '→';
+  color: var(--violet);
+  font-weight: 700;
+}
+
+.ioc-sbt-cost {
+  margin-top: 2px;
+  background: rgba(200, 50, 50, 0.06);
+  border: 1px solid rgba(200, 50, 50, 0.18);
+  border-radius: 6px;
+  padding: 5px 9px;
+  font-size: 0.82em;
+  color: #cc3333;
+  font-weight: 600;
+  text-align: center;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SLIDE SLICE TESTING
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.slice-scene {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.48em;
+  width: 100%;
+  height: calc(100% - 60px);
+  margin-top: 4px;
+}
+
+/* Rappel contexte complet */
+.slice-fullctx {
+  background: #fff;
+  border: 1.5px solid rgba(23, 15, 35, 0.1);
+  border-radius: 8px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 8px rgba(155, 64, 255, 0.04);
+  flex-shrink: 0;
+}
+
+.slice-fullctx-label {
+  font-weight: 700;
+  font-size: 0.95em;
+  color: var(--ash);
+  white-space: nowrap;
+}
+
+.slice-annotation {
+  font-family: "Fira Code", "JetBrains Mono", monospace !important;
+  font-weight: 700 !important;
+  font-size: 0.92em !important;
+  padding: 3px 10px !important;
+}
+
+/* Badges coût */
+.slice-cost-badge {
+  display: inline-block;
+  padding: 3px 11px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.88em;
+  white-space: nowrap;
+}
+
+.slice-cost-high {
+  background: rgba(200, 50, 50, 0.07);
+  border: 1.5px solid rgba(200, 50, 50, 0.2);
+  color: #cc3333;
+}
+
+.slice-cost-low {
+  background: rgba(60, 160, 50, 0.08);
+  border: 1.5px solid rgba(60, 160, 50, 0.25);
+  color: #2c8a20;
+}
+
+.slice-beans-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+/* Grille 3 lignes × 2 colonnes (couche | carte) */
+.slice-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  grid-template-rows: 1fr 0.4fr 1fr;
+  gap: 10px;
+  flex: 1;
+}
+
+/* Couches */
+.slice-layer {
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9em;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.slice-layer-web {
+  background: rgba(155, 64, 255, 0.1);
+  border: 2px solid var(--violet);
+  color: var(--violet);
+}
+
+.slice-layer-service {
+  background: rgba(23, 15, 35, 0.04);
+  border: 2px solid rgba(23, 15, 35, 0.15);
+  color: var(--ash);
+}
+
+.slice-layer-persistence {
+  background: var(--c-pg-light);
+  border: 2px solid var(--c-pg);
+  color: var(--c-pg);
+}
+
+/* Cartes slice */
+.slice-card {
+  background: #fff;
+  border: 2px solid rgba(23, 15, 35, 0.1);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(155, 64, 255, 0.04);
+}
+
+.slice-card-web { border-color: var(--violet); }
+.slice-card-jpa { border-color: var(--c-pg); }
+
+.slice-card-service {
+  border: 2px dashed rgba(23, 15, 35, 0.15);
+  background: rgba(23, 15, 35, 0.02);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.slice-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.slice-card-title {
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-weight: 800;
+  font-size: 1.05em;
+  color: var(--violet);
+}
+
+.slice-card-title-pg {
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-weight: 800;
+  font-size: 1.05em;
+  color: var(--c-pg);
+}
+
+.slice-card-service-label {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: var(--ash);
+  font-style: italic;
+  text-align: center;
+}
+
+.slice-card-service-note {
+  font-size: 0.8em;
+  color: rgba(23, 15, 35, 0.4);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.slice-section-label {
+  font-size: 0.76em;
+  font-weight: 700;
+  color: var(--ash);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.slice-section-label-out {
+  font-size: 0.76em;
+  font-weight: 700;
+  color: rgba(23,15,35,0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.slice-beans-out {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.archi-algo-step-out {
+  display: inline-block;
+  background: rgba(23, 15, 35, 0.04);
+  color: rgba(23,15,35,0.3);
+  font-size: 0.78em;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px dashed rgba(23,15,35,0.15);
+  text-decoration: line-through;
+}
+
+.slice-note {
+  font-size: 0.82em;
+  color: var(--ash);
+  font-style: italic;
+  border-left: 2px solid rgba(23, 15, 35, 0.12);
+  padding-left: 8px;
+  line-height: 1.4;
+  margin-top: auto;
+}
+
+.slice-others-note {
+  font-size: 0.8em;
+  color: var(--ash);
+  font-style: italic;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GLOBAL OVERRIDES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Graphe de beans (colonne gauche) ──────────────────────── */
+
+.ioc-graph-area {
+  position: relative;
+}
+
+/* Cadre Component Scan (fragment 1) */
+.ioc-scan-frame {
+  border: 2px dashed rgba(155, 64, 255, 0.35);
+  border-radius: 14px;
+  padding: 14px 14px 10px;
+  background: rgba(155, 64, 255, 0.02);
+  position: relative;
+}
+
+.ioc-scan-label {
+  position: absolute;
+  top: -13px;
+  left: 14px;
+  background: #f7f5fb;
+  padding: 0 8px;
+  font-size: 0.85em;
+  font-weight: 700;
+  color: var(--violet);
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Cadre ApplicationContext (fragment 2, remplace scan-frame label) */
+.ioc-ctx-label {
+  position: absolute;
+  top: -13px;
+  left: 14px;
+  background: #f7f5fb;
+  padding: 0 8px;
+  font-size: 0.85em;
+  font-weight: 700;
+  color: var(--violet);
+  letter-spacing: 0.04em;
+}
+
+/* Nœuds beans */
+.ioc-nodes {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ioc-node-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ioc-node {
+  flex: 1;
+  border: 2px solid rgba(23, 15, 35, 0.12);
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(155, 64, 255, 0.05);
+}
+
+.ioc-node-annotation {
+  display: inline-block;
+  background: rgba(155, 64, 255, 0.1);
+  color: var(--violet);
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-size: 0.85em;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.ioc-node-name {
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-weight: 600;
+  font-size: 0.92em;
+  color: var(--midnight);
+}
+
+/* Badge singleton (fragment 2) */
+.ioc-singleton-badge {
+  display: inline-block;
+  background: rgba(23, 15, 35, 0.05);
+  border: 1px solid rgba(23, 15, 35, 0.12);
+  color: var(--ash);
+  font-size: 0.76em;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* Connecteur vertical entre nœuds (fragment 3 — flèche dépendance) */
+.ioc-dep-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1px 0 1px 28px;
+  gap: 0;
+}
+
+.ioc-dep-line {
+  width: 2px;
+  height: 18px;
+  background: var(--violet);
+  opacity: 0.5;
+  margin-left: 16px;
+  position: relative;
+}
+
+.ioc-dep-line::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: -4px;
+  border: solid var(--violet);
+  border-width: 0 2px 2px 0;
+  padding: 3px;
+  transform: rotate(45deg);
+  opacity: 0.7;
+}
+
+.ioc-dep-label {
+  font-size: 0.75em;
+  color: var(--violet);
+  font-weight: 600;
+  font-style: italic;
+  margin-left: 4px;
+}
+
+/* Cadre AOP proxy (fragment 4) */
+.ioc-proxy-wrap {
+  position: relative;
+  padding: 4px;
+}
+
+.ioc-proxy-frame {
+  position: absolute;
+  inset: 0;
+  border: 2px dashed #e06b1a;
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.ioc-proxy-label {
+  position: absolute;
+  top: -11px;
+  right: 10px;
+  background: #f7f5fb;
+  padding: 0 6px;
+  font-size: 0.8em;
+  font-weight: 700;
+  color: #e06b1a;
+}
+
+.ioc-aop-badges {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+  justify-content: flex-end;
+}
+
+.ioc-aop-badge {
+  display: inline-block;
+  background: rgba(224, 107, 26, 0.08);
+  border: 1px solid rgba(224, 107, 26, 0.25);
+  color: #c25c10;
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-size: 0.76em;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+/* Note résolution de graphe (fragment 3) */
+.ioc-graph-note {
+  margin-top: 0;
+  background: rgba(155, 64, 255, 0.04);
+  border-left: 3px solid var(--violet);
+  border-radius: 0 6px 6px 0;
+  padding: 12px 16px;
+  font-size: 1.12em;
+  color: var(--ash);
+  line-height: 1.55;
+}
+
+.ioc-graph-note strong {
+  color: var(--violet);
+  font-weight: 700;
+}
+
+/* ── Encart 3 conséquences (fragment 5, à droite haut) ───────────────────── */
+
+.ioc-consequences {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ioc-consequence-item {
+  background: #fff;
+  border: 1.5px solid rgba(23, 15, 35, 0.08);
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 1px 4px rgba(155, 64, 255, 0.04);
+}
+
+.ioc-consequence-title {
+  font-weight: 700;
+  font-size: 1.02em;
+  color: var(--midnight);
+}
+
+.ioc-consequence-desc {
+  font-size: 0.92em;
+  color: var(--ash);
+  line-height: 1.4;
+}
+
+/* ── Bloc @SpringBootTest (fragment 4, colonne droite, en haut) ──────────── */
+
+.ioc-sbt-block {
+  background: linear-gradient(135deg, rgba(155, 64, 255, 0.07) 0%, rgba(91, 64, 255, 0.03) 100%);
+  border: 2px solid var(--violet);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ioc-sbt-annotation {
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-weight: 800;
+  font-size: 1.05em;
+  color: var(--violet);
+  text-align: center;
+}
+
+.ioc-sbt-desc {
+  font-size: 0.95em;
+  color: var(--ash);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.ioc-sbt-items {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ioc-sbt-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.92em;
+  color: var(--midnight);
+  font-weight: 600;
+}
+
+.ioc-sbt-item::before {
+  content: '→';
+  color: var(--violet);
+  font-weight: 700;
+}
+
+.ioc-sbt-cost {
+  margin-top: 4px;
+  background: rgba(200, 50, 50, 0.06);
+  border: 1px solid rgba(200, 50, 50, 0.18);
+  border-radius: 6px;
+  padding: 5px 9px;
+  font-size: 0.92em;
+  color: #cc3333;
+  font-weight: 600;
+  text-align: center;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SLIDE SLICE TESTING
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.slice-scene {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.48em;
+  width: 100%;
+  margin-top: 2px;
+}
+
+/* Rappel contexte complet */
+.slice-fullctx {
+  background: #fff;
+  border: 1.5px solid rgba(23, 15, 35, 0.1);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 8px rgba(155, 64, 255, 0.04);
+}
+
+.slice-fullctx-label {
+  font-weight: 700;
+  font-size: 0.95em;
+  color: var(--ash);
+  white-space: nowrap;
+}
+
+.slice-annotation {
+  font-family: "Fira Code", "JetBrains Mono", monospace !important;
+  font-weight: 700 !important;
+  font-size: 0.92em !important;
+  padding: 3px 10px !important;
+}
+
+.slice-time-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.88em;
+}
+
+.slice-time-slow {
+  background: rgba(200, 50, 50, 0.07);
+  border: 1.5px solid rgba(200, 50, 50, 0.2);
+  color: #cc3333;
+}
+
+.slice-time-fast {
+  background: rgba(60, 160, 50, 0.08);
+  border: 1.5px solid rgba(60, 160, 50, 0.25);
+  color: #2c8a20;
+}
+
+.slice-beans-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+/* Zone tranches + cards */
+.slice-body {
+  display: grid;
+  grid-template-columns: 110px 1fr 1fr;
+  gap: 10px;
+  align-items: stretch;
+}
+
+/* Colonne tranches graphiques (fragment 1) */
+.slice-layers-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.slice-layer {
+  flex: 1;
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85em;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.slice-layer-web {
+  background: rgba(155, 64, 255, 0.1);
+  border: 2px solid var(--violet);
+  color: var(--violet);
+}
+
+.slice-layer-service {
+  background: rgba(23, 15, 35, 0.04);
+  border: 2px solid rgba(23, 15, 35, 0.15);
+  color: var(--ash);
+}
+
+.slice-layer-persistence {
+  background: var(--c-pg-light);
+  border: 2px solid var(--c-pg);
+  color: var(--c-pg);
+}
+
+/* Cards slice (fragments 2 et 3) */
+.slice-card {
+  background: #fff;
+  border: 2px solid rgba(23, 15, 35, 0.1);
+  border-radius: 10px;
+  padding: 8px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(155, 64, 255, 0.04);
+}
+
+.slice-card-web {
+  border-color: var(--violet);
+}
+
+.slice-card-jpa {
+  border-color: var(--c-pg);
+}
+
+.slice-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.slice-card-title {
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-weight: 800;
+  font-size: 1.02em;
+  color: var(--violet);
+}
+
+.slice-card-title-pg {
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-weight: 800;
+  font-size: 1.02em;
+  color: var(--c-pg);
+}
+
+.slice-section-label {
+  font-size: 0.78em;
+  font-weight: 700;
+  color: var(--ash);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+
+.slice-section-label-out {
+  font-size: 0.78em;
+  font-weight: 700;
+  color: rgba(23,15,35,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+  margin-top: 2px;
+}
+
+.slice-beans-out {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.archi-algo-step-out {
+  display: inline-block;
+  background: rgba(23, 15, 35, 0.04);
+  color: rgba(23,15,35,0.3);
+  font-size: 0.78em;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px dashed rgba(23,15,35,0.15);
+  text-decoration: line-through;
+}
+
+.slice-note {
+  font-size: 0.82em;
+  color: var(--ash);
+  font-style: italic;
+  border-left: 2px solid rgba(23, 15, 35, 0.12);
+  padding-left: 8px;
+  line-height: 1.4;
+}
+
+/* Tableau comparatif (fragment 4) */
+.slice-table-wrap {
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1.5px solid rgba(23, 15, 35, 0.1);
+  box-shadow: 0 2px 8px rgba(155, 64, 255, 0.04);
+}
+
+.slice-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.42em;
+}
+
+.slice-table th {
+  padding: 7px 12px;
+  font-weight: 700;
+  text-align: center;
+  font-size: 1em;
+}
+
+.slice-table th:first-child {
+  text-align: left;
+  background: rgba(23, 15, 35, 0.03);
+  color: var(--ash);
+}
+
+.slice-table th.th-sbt {
+  background: rgba(155, 64, 255, 0.07);
+  color: var(--violet);
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+}
+
+.slice-table th.th-web {
+  background: rgba(155, 64, 255, 0.05);
+  color: var(--violet);
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+}
+
+.slice-table th.th-jpa {
+  background: var(--c-pg-light);
+  color: var(--c-pg);
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+}
+
+.slice-table td {
+  padding: 6px 12px;
+  border-top: 1px solid rgba(23, 15, 35, 0.06);
+  text-align: center;
+  font-size: 1em;
+  color: var(--midnight);
+}
+
+.slice-table td:first-child {
+  text-align: left;
+  font-weight: 600;
+  color: var(--ash);
+  background: rgba(23, 15, 35, 0.015);
+}
+
+.slice-table tr:nth-child(even) td {
+  background: rgba(155, 64, 255, 0.015);
+}
+
+.slice-table tr:nth-child(even) td:first-child {
+  background: rgba(23, 15, 35, 0.025);
+}
+
+.slice-others-note {
+  font-size: 0.72em;
+  color: var(--ash);
+  font-style: italic;
+  text-align: right;
+  margin-top: 4px;
+  padding-right: 4px;
+}
+
+/* ── Agrandissement du texte (slide allégé : sans Contexte complet,
+      sans détail Métier, sans « Non chargé »). Sélecteurs préfixés par
+      .slice-scene pour ne pas impacter les classes partagées (archi). ── */
+.slice-scene .slice-layer { font-size: 1.5em; }
+.slice-scene .slice-card-head { font-size: 1.62em; }
+.slice-scene .slice-beans-row { font-size: 1.72em; }
+.slice-scene .slice-section-label { font-size: 1.12em; }
+.slice-scene .slice-section-label-out { font-size: 1.12em; }
+.slice-scene .slice-beans-out { font-size: 1.6em; }
+.slice-scene .slice-note { font-size: 1.3em; line-height: 1.45; }
+.slice-scene .slice-card-service-label { font-size: 1.6em; }
+.slice-scene .slice-others-note { font-size: 1.15em; }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SLIDE 9 — SPRING BOOT 4 IMPACT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.sb4-scene {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.55em;
+  margin-top: 6px;
+  width: 100%;
+}
+
+.sb4-intro-banner {
+  background: linear-gradient(135deg, rgba(155, 64, 255, 0.08), rgba(0, 160, 255, 0.06));
+  border: 1px solid rgba(155, 64, 255, 0.22);
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: var(--midnight);
+  font-size: 1em;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.sb4-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.sb4-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sb4-col-title {
+  font-weight: 700;
+  font-size: 0.95em;
+  color: var(--violet);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-bottom: 3px;
+  border-bottom: 2px solid rgba(155, 64, 255, 0.2);
+}
+
+/* --- Module table (left col) --- */
+.sb4-module-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(155, 64, 255, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sb4-module-header {
+  background: rgba(155, 64, 255, 0.08);
+  font-weight: 700 !important;
+  color: var(--midnight) !important;
+  font-size: 0.9em;
+}
+
+.sb4-module-row {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid rgba(155, 64, 255, 0.08);
+  color: var(--midnight);
+  font-size: 0.9em;
+  align-items: center;
+}
+
+.sb4-module-row:last-child {
+  border-bottom: none;
+}
+
+.sb4-module-row-highlight {
+  background: rgba(255, 180, 0, 0.06);
+  border-top: 1px solid rgba(255, 180, 0, 0.2);
+  border-bottom: none;
+}
+
+.sb4-artifact {
+  color: var(--ash);
+  font-family: monospace;
+  font-size: 0.88em;
+  word-break: break-all;
+}
+
+.sb4-artifact-warn {
+  color: #b07000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.sb4-warn-badge {
+  display: inline-block;
+  background: rgba(255, 180, 0, 0.15);
+  border: 1px solid rgba(255, 180, 0, 0.4);
+  color: #8a5700;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.82em;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+/* --- Package list (right col) --- */
+.sb4-pkg-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sb4-pkg-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.sb4-pkg-label {
+  font-size: 0.72em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ash);
+}
+
+.sb4-pkg-old {
+  font-size: 0.8em;
+  background: rgba(230, 0, 0, 0.06);
+  border: 1px solid rgba(220, 0, 0, 0.15);
+  border-radius: 4px;
+  padding: 3px 7px;
+  color: #a00000;
+  word-break: break-all;
+  display: block;
+}
+
+.sb4-pkg-new {
+  font-size: 0.8em;
+  background: rgba(0, 160, 0, 0.06);
+  border: 1px solid rgba(0, 160, 0, 0.2);
+  border-radius: 4px;
+  padding: 3px 7px;
+  color: #006600;
+  word-break: break-all;
+  display: block;
+}
+
+.sb4-pkg-arrow {
+  text-align: center;
+  color: var(--ash);
+  font-size: 1em;
+  line-height: 1.2;
+}
+
+.sb4-pkg-separator {
+  height: 8px;
+}
+
+/* --- Retex band --- */
+.sb4-retex {
+  background: rgba(23, 15, 35, 0.03);
+  border: 1px solid rgba(155, 64, 255, 0.12);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.sb4-retex-title {
+  font-weight: 700;
+  font-size: 0.9em;
+  color: var(--violet);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 6px;
+}
+
+.sb4-retex-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sb4-retex-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.9em;
+  color: var(--midnight);
+  line-height: 1.4;
+}
+
+.sb4-retex-tag {
+  display: inline-block;
+  font-size: 0.78em;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 1px 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sb4-tag-security {
+  background: rgba(155, 64, 255, 0.1);
+  border: 1px solid rgba(155, 64, 255, 0.25);
+  color: var(--violet);
+}
+
+.sb4-tag-profile {
+  background: rgba(0, 160, 255, 0.1);
+  border: 1px solid rgba(0, 160, 255, 0.25);
+  color: #005fa0;
+}
+
+.sb4-tag-db {
+  background: rgba(51, 103, 145, 0.1);
+  border: 1px solid rgba(51, 103, 145, 0.3);
+  color: var(--c-pg);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SLIDES 10-15 — REWORK GUIDANCE (Mockserver + Testcontainers PG + Mongo)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Layout principal de la slide "intention + consignes" */
+.rework-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 18px 0 0 0;
+  text-align: left;
+}
+
+.rework-grid-single {
+  grid-template-columns: 1fr;
+}
+
+.rework-col {
+  /* min-width:0 critique : sans ça, les <code> inline-block forcent la
+     colonne à respecter leur taille minimum et la grille déborde */
+  min-width: 0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(23, 15, 35, 0.08);
+  box-shadow: 0 2px 8px rgba(23, 15, 35, 0.04);
+  overflow-wrap: break-word;
+}
+
+.rework-col-title {
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--midnight);
+  opacity: 0.7;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(23, 15, 35, 0.08);
+}
+
+.rework-col-why {
+  border-left: 4px solid var(--violet);
+}
+.rework-col-why .rework-col-title {
+  color: var(--violet);
+  opacity: 1;
+}
+
+.rework-col-howto {
+  border-left: 4px solid var(--ash);
+}
+
+.rework-bullets,
+.rework-steps {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.8em;
+  line-height: 1.5;
+}
+
+/* Les listes rework contiennent du <code> inline : le flex du thème
+   (.reveal ul/ol li) découpe le texte en flex-items qui rétrécissent
+   (retour à la ligne mot-à-mot). On repasse en flux normal (list-item)
+   avec une puce / un numéro en position absolue. .reveal augmente la
+   spécificité pour battre la règle du thème. */
+.reveal .rework-bullets li,
+.reveal .rework-steps li {
+  display: list-item;
+  list-style: none;
+  position: relative;
+  padding-left: 1.9em;
+  margin-bottom: 10px;
+  line-height: 1.55;
+  align-items: initial;
+  gap: 0;
+}
+
+.reveal .rework-bullets li:last-child,
+.reveal .rework-steps li:last-child {
+  margin-bottom: 0;
+}
+
+.reveal .rework-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0.1em;
+  top: 0.5em;
+  width: 0.62em;
+  height: 0.62em;
+  border-radius: 50%;
+  background: var(--gradient-accent);
+}
+
+.reveal .rework-steps {
+  counter-reset: rwstep;
+}
+
+.reveal .rework-steps li {
+  counter-increment: rwstep;
+}
+
+.reveal .rework-steps li::before {
+  content: counter(rwstep);
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  background: var(--gradient-accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.78em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Code inline discret : monospace + couleur accent, pas de pavé.
+   Les identifiants courts restent insécables (nowrap). Pour des identifiants
+   longs (HttpServiceProxyFactory, etc.), préférer une formulation textuelle
+   dans le contenu de la slide plutôt qu'un <code>. */
+.rework-bullets code,
+.rework-steps code {
+  font-size: 0.95em;
+  font-family: "Fira Code", "JetBrains Mono", Consolas, monospace;
+  color: var(--violet);
+  background: none !important;
+  padding: 0 !important;
+  border: none !important;
+  white-space: nowrap;
+}
+
+/* Bandeau contextuel « Déjà fourni » (slides rework) */
+.rework-context {
+  margin: 16px 0 2px 0;
+  padding: 12px 18px;
+  border-radius: 10px;
+  background: rgba(23, 15, 35, 0.035);
+  border: 1px solid rgba(23, 15, 35, 0.08);
+  border-left: 4px solid var(--c-pg);
+  font-size: 0.62em;
+  line-height: 1.5;
+  color: var(--ash);
+  text-align: left;
+}
+
+.rework-context strong {
+  color: var(--c-pg);
+  font-weight: 700;
+}
+
+.rework-context code {
+  font-family: "Fira Code", "JetBrains Mono", Consolas, monospace;
+  color: var(--violet);
+  font-size: 0.95em;
+}
+
+/* Dépendance Maven mise en avant — slide Refacto 3 (jdbc:tc) */
+.r3-dep {
+  display: block;
+  margin-top: 18px;
+  padding: 14px 22px;
+  border-radius: 12px;
+  background: var(--c-pg-light);
+  border: 1px solid rgba(51, 103, 145, 0.25);
+  border-left: 4px solid var(--c-pg);
+  text-align: left;
+}
+
+.r3-dep-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.7em;
+  font-weight: 800;
+  color: var(--c-pg);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.r3-dep-label code {
+  color: var(--violet);
+  font-size: 0.95em;
+}
+
+.r3-dep-badge {
+  font-size: 0.82em;
+  font-weight: 700;
+  background: rgba(51, 103, 145, 0.12);
+  color: var(--c-pg);
+  border: 1px solid rgba(51, 103, 145, 0.3);
+  border-radius: 999px;
+  padding: 2px 12px;
+  white-space: nowrap;
+}
+
+.r3-dep-aside {
+  opacity: 0.8;
+}
+
+.r3-dep-code {
+  margin: 0 !important;
+}
+
+.rework-hint {
+  margin-top: 18px;
+  font-size: 0.72em;
+  text-align: right;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.rework-hint code {
+  font-style: normal;
+}
+
+/* Bloc Tips (fragment révélé au « next ») — slide Refacto 1 */
+.rework-tips {
+  margin-top: 22px;
+  border-radius: 12px;
+  padding: 16px 22px;
+  background: rgba(255, 180, 0, 0.07);
+  border: 1px solid rgba(255, 180, 0, 0.35);
+  border-left: 4px solid #e0a500;
+  text-align: left;
+}
+
+.rework-tips-title {
+  font-size: 0.72em;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #a06b00;
+  margin-bottom: 10px;
+}
+
+.reveal .rework-tips-list {
+  margin: 0;
+  padding-left: 0;
+  font-size: 0.78em;
+  line-height: 1.5;
+}
+
+.reveal .rework-tips-list li {
+  display: list-item;
+  list-style: none;
+  position: relative;
+  padding-left: 1.6em;
+  margin-bottom: 8px;
+  align-items: initial;
+  gap: 0;
+}
+
+.reveal .rework-tips-list li:last-child {
+  margin-bottom: 0;
+}
+
+.reveal .rework-tips-list li::before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: auto;
+  height: auto;
+  background: none;
+  border-radius: 0;
+  color: #c98a00;
+  font-weight: 700;
+}
+
+.rework-tips-list code {
+  font-size: 0.95em;
+  font-family: "Fira Code", "JetBrains Mono", Consolas, monospace;
+  color: var(--violet);
+  background: none !important;
+  padding: 0 !important;
+  border: none !important;
+  white-space: nowrap;
+}
+
+.rework-pom-banner {
+  display: inline-block;
+  margin: 12px auto 18px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-size: 0.7em;
+  font-weight: 600;
+  background: rgba(155, 64, 255, 0.08);
+  border: 1px solid rgba(155, 64, 255, 0.22);
+  color: var(--violet);
+}
+
+.rework-pom-banner code {
+  font-size: 0.95em;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.rework-pom-pre {
+  margin: 18px auto 0 !important;
+  max-width: 78%;
+  text-align: left;
+}
+
+.rework-pom-pre code {
+  font-size: 0.7em !important;
+  line-height: 1.5 !important;
+  padding: 24px 28px !important;
+  border-radius: 10px;
+}
+
+/* Variante dense pour les snippets longs (rework 3 et 4) */
+.rework-pom-dense {
+  max-width: 88%;
+}
+
+.rework-pom-dense code {
+  font-size: 0.46em !important;
+  line-height: 1.42 !important;
+  padding: 18px 24px !important;
+}
+
+/* Accent thématique par techno ---------------------------------------------- */
+
+.rework-accent-mock.rework-col-why {
+  border-left-color: var(--mauve);
+}
+.rework-accent-mock.rework-col-why .rework-col-title {
+  color: var(--mauve);
+}
+.rework-accent-mock.rework-pom-banner {
+  background: rgba(255, 0, 221, 0.06);
+  border-color: rgba(255, 0, 221, 0.25);
+  color: var(--mauve);
+}
+
+.rework-accent-pg.rework-col-why {
+  border-left-color: var(--c-pg);
+}
+.rework-accent-pg.rework-col-why .rework-col-title {
+  color: var(--c-pg);
+}
+.rework-accent-pg.rework-pom-banner {
+  background: var(--c-pg-light);
+  border-color: rgba(51, 103, 145, 0.3);
+  color: var(--c-pg);
+}
+
+/* Accents BUG-1042 (rouge) & FEAT-2077 (vert) */
+.rework-accent-bug.rework-col-why {
+  border-left-color: #e5484d;
+}
+.rework-accent-bug.rework-col-why .rework-col-title {
+  color: #cc3b40;
+}
+.rework-accent-feat.rework-col-why {
+  border-left-color: #30a46c;
+}
+.rework-accent-feat.rework-col-why .rework-col-title {
+  color: #218358;
+}
+
+/* Mots colorés inline : test vert / rouge */
+.reveal .test-vert { color: #218358; }
+.reveal .test-rouge { color: #cc3b40; }
+
+.rework-accent-mongo.rework-col-why {
+  border-left-color: var(--c-mongo);
+}
+.rework-accent-mongo.rework-col-why .rework-col-title {
+  color: var(--c-mongo);
+}
+.rework-accent-mongo.rework-pom-banner {
+  background: var(--c-mongo-light);
+  border-color: rgba(77, 179, 61, 0.3);
+  color: #2d8521;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GLOBAL OVERRIDES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Progress bar uses gradient */
+.reveal .progress span {
+  background: var(--gradient-accent);
+}
+
+/* Controls use violet */
+.reveal .controls {
+  color: var(--violet);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SLIDES "Récupérer la codebase" & "Votre avis" (QR + lien, centrés)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Titres alignés à gauche comme les autres slides ; seul le bloc QR/URL est centré */
+.reveal .slides section.slide-grab > h2,
+.reveal .slides section.slide-poll > h2,
+.reveal .slides section.slide-grab > .intro-text,
+.reveal .slides section.slide-poll > .intro-text {
+  text-align: left;
+}
+
+.grab-content,
+.poll-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 56px;
+  margin-top: 28px;
+}
+
+.grab-content {
+  gap: 40px;
+  margin-top: 18px;
+  justify-content: flex-start;
+}
+
+.grab-qr,
+.poll-qr {
+  flex: 0 0 auto;
+}
+
+.poll-qr-img,
+.qr-img {
+  width: 260px;
+  height: 260px;
+  border-radius: 16px;
+  background: #fff;
+  padding: 12px;
+  box-shadow: 0 6px 24px rgba(155, 64, 255, 0.12);
+}
+
+.qr-img {
+  width: 210px;
+  height: 210px;
+}
+
+/* Placeholder visuel du QR (à remplacer par <img>) */
+.qr-placeholder {
+  width: 300px;
+  height: 300px;
+  border: 4px dashed rgba(155, 64, 255, 0.4);
+  border-radius: 16px;
+  background: rgba(155, 64, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--violet);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+}
+
+.qr-placeholder span {
+  font-size: 0.95rem;
+  font-weight: 600;
+  opacity: 0.7;
+  letter-spacing: 0;
+}
+
+.grab-info,
+.poll-info {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 560px;
+}
+
+.grab-info {
+  max-width: 960px;
+}
+
+.grab-label {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ash);
+}
+
+.grab-url {
+  font-family: monospace;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--violet);
+  background: rgba(155, 64, 255, 0.08);
+  border: 1.5px solid rgba(155, 64, 255, 0.25);
+  border-radius: 10px;
+  padding: 12px 18px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.reveal .slides section.slide-grab .grab-pre {
+  margin: 22px 0 0 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.grab-pre code {
+  font-size: 1.7rem;
+  line-height: 1.55;
+}
+
+/* Pré-requis (slide "Récupérer la codebase") */
+.grab-prereqs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0 4px 0;
+}
+
+.grab-prereq-label {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ash);
+  margin-right: 4px;
+}
+
+.grab-prereq {
+  display: inline-block;
+  background: rgba(155, 64, 255, 0.08);
+  border: 1.5px solid rgba(155, 64, 255, 0.28);
+  color: var(--violet);
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 6px 16px;
+  border-radius: 999px;
+}
+
+/* Code & textes courts réutilisés dans les colonnes rework (Refacto 2) */
+.rework-code {
+  margin: 12px 0 0 0 !important;
+  max-width: 100% !important;
+  text-align: left;
+}
+
+.rework-code code {
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.rework-mini {
+  font-size: 0.82em;
+  line-height: 1.45;
+  margin: 6px 0 0 0;
+  opacity: 0.92;
+}
+
+.rework-banner-inline {
+  display: inline-block;
+  margin: 0 0 12px 0;
+  font-size: 0.9em;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SLIDE — LES 3 SERVICES MÉTIER (schéma responsabilités + chaîne)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.svc-diagram {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+  margin-top: 18px;
+}
+
+/* Cartes service */
+.svc-card {
+  flex: 1 1 0;
+  min-width: 0;
+  background: #fff;
+  border: 2px solid rgba(23, 15, 35, 0.12);
+  border-radius: 14px;
+  padding: 20px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 4px 18px rgba(155, 64, 255, 0.06);
+  position: relative;
+}
+
+/* Liseré coloré en tête de carte */
+.svc-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 14px 14px 0 0;
+}
+
+.svc-card-assign { border-color: rgba(155, 64, 255, 0.55); }
+.svc-card-assign::before { background: var(--gradient-accent); }
+
+.svc-card-species { border-color: rgba(91, 64, 255, 0.45); }
+.svc-card-species::before { background: var(--blue); }
+
+.svc-card-type { border-color: rgba(51, 103, 145, 0.55); }
+.svc-card-type::before { background: var(--c-pg); }
+
+.svc-card-registry { border-color: rgba(91, 64, 255, 0.35); }
+.svc-card-registry::before { background: var(--violet); }
+
+/* Branche : DinoSpeciesService alimente 2 sources empilées */
+.svc-branch {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.svc-branch .svc-card {
+  flex: 1 1 0;
+  padding: 12px 14px 10px;
+  gap: 5px;
+}
+
+.svc-branch .svc-card-deps {
+  padding-top: 8px;
+}
+
+.svc-card-role {
+  font-size: 0.62em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ash);
+}
+
+.svc-card-assign .svc-card-role { color: var(--violet); }
+.svc-card-species .svc-card-role { color: var(--blue); }
+.svc-card-type .svc-card-role { color: var(--c-pg); }
+.svc-card-registry .svc-card-role { color: var(--violet); }
+
+.svc-card-name {
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-weight: 800;
+  font-size: 0.78em;
+  color: var(--midnight);
+  letter-spacing: -0.03em;
+  word-break: break-word;
+}
+
+.svc-card-desc {
+  font-size: 0.8em;
+  color: var(--ash);
+  line-height: 1.45;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.svc-card-detail {
+  font-size: 0.88em;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.svc-card-detail code {
+  font-size: 0.92em;
+}
+
+.svc-card-deps {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(23, 15, 35, 0.08);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+}
+
+.svc-dep-label {
+  font-size: 0.62em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(23, 15, 35, 0.4);
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.svc-dep-tag {
+  display: inline-block;
+  background: rgba(23, 15, 35, 0.05);
+  color: var(--ash);
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  font-size: 0.66em;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 5px;
+  border: 1px solid rgba(23, 15, 35, 0.08);
+}
+
+/* Flèche de liaison entre cartes (sens de la dépendance) */
+.svc-arrow {
+  flex: 0 0 88px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 6px;
+}
+
+.svc-arrow-line {
+  width: 100%;
+  height: 2px;
+  background: var(--violet);
+  opacity: 0.45;
+  position: relative;
+}
+
+.svc-arrow-line::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: -4px;
+  border: solid var(--violet);
+  border-width: 0 2px 2px 0;
+  padding: 3px;
+  transform: rotate(-45deg);
+  opacity: 0.75;
+}
+
+.svc-arrow-note {
+  font-size: 0.6em;
+  font-style: italic;
+  color: var(--violet);
+  opacity: 0.85;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.svc-footnote {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 0.72em;
+  color: var(--ash);
+  font-style: italic;
+}
+
+.svc-footnote strong {
+  color: var(--violet);
+  font-style: normal;
+  font-weight: 700;
+}
+
+.svc-footnote code {
+  font-style: normal;
+  font-size: 0.92em;
+}
+

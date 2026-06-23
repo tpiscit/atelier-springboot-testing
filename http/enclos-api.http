@@ -1,0 +1,59 @@
+### ============================================
+### ENCLOS API - Gestion des enclos
+### ============================================
+
+### Créer un enclos FORET dans le parc HAWAII
+POST {{host}}/api/parcs/HAWAII/enclos
+Content-Type: application/json
+
+{
+  "typologie": "FORET",
+  "surface": 500
+}
+
+### Créer un enclos PLAINE dans le parc HAWAII
+POST {{host}}/api/parcs/HAWAII/enclos
+Content-Type: application/json
+
+{
+  "typologie": "PLAINE",
+  "surface": 1000
+}
+
+### Créer un enclos EAU dans le parc BELLEILE
+POST {{host}}/api/parcs/BELLEILE/enclos
+Content-Type: application/json
+
+{
+  "typologie": "EAU",
+  "surface": 300
+}
+
+### Créer un enclos MONTAGNE dans le parc NOIRMOUTIER
+POST {{host}}/api/parcs/NOIRMOUTIER/enclos
+Content-Type: application/json
+
+{
+  "typologie": "MONTAGNE",
+  "surface": 800
+}
+
+### ============================================
+### Modifier un enclos (remplacer {enclosId} par l'ID réel)
+### ============================================
+
+### Modifier l'enclos 1 du parc HAWAII
+PUT {{host}}/api/parcs/HAWAII/enclos/1
+Content-Type: application/json
+
+{
+  "typologie": "FORET",
+  "surface": 750
+}
+
+### ============================================
+### Supprimer un enclos (remplacer {enclosId} par l'ID réel)
+### ============================================
+
+### Supprimer l'enclos 1 du parc HAWAII
+DELETE {{host}}/api/parcs/HAWAII/enclos/1

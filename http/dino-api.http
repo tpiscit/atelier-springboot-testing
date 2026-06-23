@@ -1,0 +1,59 @@
+### ============================================
+### DINO ASSIGNMENT API - Assignation des dinosaures
+### ============================================
+### L'API récupère automatiquement les informations du dinosaure
+### via l'API DinoType (mockée sur le port 8081)
+
+### Assigner un dinosaure avec UUID 1
+POST {{host}}/api/dinos/assign
+Content-Type: application/json
+
+"550e8400-e29b-41d4-a716-446655440001"
+
+### Assigner un dinosaure avec UUID 2
+POST {{host}}/api/dinos/assign
+Content-Type: application/json
+
+"550e8400-e29b-41d4-a716-446655440002"
+
+### Assigner un dinosaure avec UUID 3
+POST {{host}}/api/dinos/assign
+Content-Type: application/json
+
+"550e8400-e29b-41d4-a716-446655440003"
+
+### Assigner un dinosaure avec UUID 4
+POST {{host}}/api/dinos/assign
+Content-Type: application/json
+
+"550e8400-e29b-41d4-a716-446655440004"
+
+### Assigner un dinosaure avec UUID 5
+POST {{host}}/api/dinos/assign
+Content-Type: application/json
+
+"550e8400-e29b-41d4-a716-446655440005"
+
+### Assigner un dinosaure avec UUID 6
+POST {{host}}/api/dinos/assign
+Content-Type: application/json
+
+"550e8400-e29b-41d4-a716-446655440006"
+
+### Assigner un dinosaure avec UUID 7
+POST {{host}}/api/dinos/assign
+Content-Type: application/json
+
+"550e8400-e29b-41d4-a716-446655440007"
+
+### Assigner un dinosaure avec UUID 8
+POST {{host}}/api/dinos/assign
+Content-Type: application/json
+
+"550e8400-e29b-41d4-a716-446655440008"
+
+### Assigner un dinosaure avec UUID aléatoire
+POST {{host}}/api/dinos/assign
+Content-Type: application/json
+
+"{{$uuid}}"

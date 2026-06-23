@@ -1,0 +1,53 @@
+### ============================================
+### DINOTYPE API - API externe mockée
+### ============================================
+### Cette API est mockée par MockServer sur le port 8081
+### Elle génère dynamiquement des dinosaures à partir des UUIDs
+
+### Récupérer un T-Rex (UUID 1)
+GET {{dinotype-host}}/api/dinotype?id=550e8400-e29b-41d4-a716-446655440001
+Accept: application/json
+
+### Récupérer un Velociraptor (UUID 2)
+GET {{dinotype-host}}/api/dinotype?id=550e8400-e29b-41d4-a716-446655440002
+Accept: application/json
+
+### Récupérer un Triceratops (UUID 3)
+GET {{dinotype-host}}/api/dinotype?id=550e8400-e29b-41d4-a716-446655440003
+Accept: application/json
+
+### Récupérer un Brachiosaurus (UUID 4)
+GET {{dinotype-host}}/api/dinotype?id=550e8400-e29b-41d4-a716-446655440004
+Accept: application/json
+
+### Récupérer un Pterodactyl (UUID 5)
+GET {{dinotype-host}}/api/dinotype?id=550e8400-e29b-41d4-a716-446655440005
+Accept: application/json
+
+### Récupérer un dinosaure aléatoire (UUID 6)
+GET {{dinotype-host}}/api/dinotype?id=550e8400-e29b-41d4-a716-446655440006
+Accept: application/json
+
+### Récupérer un dinosaure aléatoire (UUID 7)
+GET {{dinotype-host}}/api/dinotype?id=550e8400-e29b-41d4-a716-446655440007
+Accept: application/json
+
+### Récupérer un dinosaure aléatoire (UUID 8)
+GET {{dinotype-host}}/api/dinotype?id=550e8400-e29b-41d4-a716-446655440008
+Accept: application/json
+
+### Récupérer un dinosaure aléatoire (UUID 9)
+GET {{dinotype-host}}/api/dinotype?id=550e8400-e29b-41d4-a716-446655440009
+Accept: application/json
+
+### Récupérer un dinosaure aléatoire (UUID 10)
+GET {{dinotype-host}}/api/dinotype?id=550e8400-e29b-41d4-a716-44665544000a
+Accept: application/json
+
+### Tester avec un UUID invalide (devrait retourner 400 BAD_REQUEST)
+GET {{dinotype-host}}/api/dinotype?id=invalid-uuid
+Accept: application/json
+
+### Tester avec un UUID aléatoire généré
+GET {{dinotype-host}}/api/dinotype?id={{$uuid}}
+Accept: application/json
